@@ -20,7 +20,8 @@ public class KMeans {
         int numberOfThreads = Runtime.getRuntime().availableProcessors();
         int numberOfClusterCenters = 3;
         int numberOfIterations = 10;
-        String filename = "";
+        //TODO system independend file storage. Classpath-Resources?
+        String filename = "D:\\Projekte\\Java\\Skandium\\examples\\src\\main\\java\\cl\\niclabs\\skandium\\examples\\kmeans\\old-faithful.csv";
 
         if (args.length != 0) {
             //TODO parse input parameters
@@ -47,16 +48,16 @@ public class KMeans {
             Skeleton<List<XYPoint>, List<XYPoint>> kmeansIteration = new Pipe<>(
                     expectationSkeleton, maximizationSkeleton
             );
-            Stream<List<XYPoint>, List<XYPoint>> stream = skandium.newStream(kmeansIteration);
-            Future<List<XYPoint>> newClusterCenters = stream.input(data);
-            clusterCenters = newClusterCenters.get();
 
-            /*Stream<List<XYPoint>, Collection<ClusteredXYPoint>> expectationStream = skandium.newStream(expectationSkeleton);
-            Future<Collection<ClusteredXYPoint>> clusteredData = expectationStream.input(data);
-            Stream<Collection<ClusteredXYPoint>, List<XYPoint>> maximizationStream = skandium.newStream(maximizationSkeleton);
-            Future<List<XYPoint>> newClusterCenters = maximizationStream.input(clusteredData.get());
-            clusterCenters = newClusterCenters.get();*/
+            final Stream<List<XYPoint>, List<XYPoint>> stream = skandium.newStream(kmeansIteration);
+            final Future<List<XYPoint>> newClusterCenters = stream.input(data);
+            clusterCenters = newClusterCenters.get();
+            int index = 0;
+            for(XYPoint clusterCenter : clusterCenters) {
+                System.out.println(index++ + " : " + clusterCenter);
+            }
         }
+        skandium.shutdown();
     }
 
     private static List<XYPoint> assignRandomClusterCentersFrom(final List<XYPoint> data, int numberOfClusterCenters) {

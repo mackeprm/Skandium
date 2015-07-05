@@ -19,9 +19,6 @@ public class ClusteredXYPoint extends XYPoint {
 
     @Override
     public String toString() {
-        return "ClusteredXYPoint{" +
-                super.toString() +
-                "clusterIndex=" + clusterIndex +
-                '}';
+        return "(" + clusterIndex + "):" + super.toString();
     }
 }

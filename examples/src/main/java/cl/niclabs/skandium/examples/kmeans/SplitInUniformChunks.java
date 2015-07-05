@@ -19,11 +19,12 @@ public class SplitInUniformChunks implements Split<List<XYPoint>,Collection<XYPo
     public Collection<XYPoint>[] split(List<XYPoint> param) throws Exception {
         Collection<XYPoint>[] result;
         //TODO check inputs: greaterThanZero, param.size > numberOfChunks
-        result = (ArrayList<XYPoint>[]) new ArrayList<?>[numberOfChunks];
+        result = (List<XYPoint>[]) new ArrayList<?>[numberOfChunks];
         int chunkLength = Math.floorDiv(param.size(), numberOfChunks);
-
+        int chunkIndex = 0;
         for(int i=0;i<param.size();i += chunkLength) {
-            result[i] = param.subList(i, Math.min(param.size(), i + chunkLength));
+            result[chunkIndex] = new ArrayList<>(param.subList(i, Math.min(param.size(), i + chunkLength)));
+            chunkIndex++;
         }
         //TODO extra chunk handling
         return result;

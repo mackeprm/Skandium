@@ -29,9 +29,6 @@ public class XYPoint {
 
     @Override
     public String toString() {
-        return "XYPoint{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        return "[" + x + ":" + y + "]";
     }
 }

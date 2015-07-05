@@ -1,6 +1,7 @@
 package cl.niclabs.skandium.examples.kmeans.util;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,8 +14,8 @@ public class DataFileReader {
     }
 
     public Stream<String> read(String filename) throws IOException {
-        InputStream in = this.getClass().getClassLoader()
-                .getResourceAsStream(filename);
+        Path path = Paths.get(filename);
+        InputStream in = Files.newInputStream(path, StandardOpenOption.READ);
         InputStreamReader reader = new InputStreamReader(in);
         return lines(new BufferedReader(reader));
     }

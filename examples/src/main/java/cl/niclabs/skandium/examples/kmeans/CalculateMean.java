@@ -14,8 +14,9 @@ public class CalculateMean implements Execute<List<XYPoint>,XYPoint> {
             sumX += point.getX();
             sumY += point.getY();
         }
-        final double meanX = 1.0d/(double)cluster.size() * sumX;
-        final double meanY = 1.0d/(double)cluster.size() * sumY;
+        final double clusterSize = (double) cluster.size();
+        final double meanX = 1.0d/clusterSize * sumX;
+        final double meanY = 1.0d/clusterSize * sumY;
         return new XYPoint((int)meanX,(int)meanY);
     }
 }
