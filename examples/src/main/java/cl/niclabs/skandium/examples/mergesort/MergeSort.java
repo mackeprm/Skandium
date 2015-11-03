@@ -18,13 +18,14 @@
 
 package cl.niclabs.skandium.examples.mergesort;
 
+import cl.niclabs.skandium.Skandium;
+import cl.niclabs.skandium.Stream;
+import cl.niclabs.skandium.skeletons.DaC;
+import cl.niclabs.skandium.skeletons.Skeleton;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.Future;
-
-import cl.niclabs.skandium.Skandium;
-import cl.niclabs.skandium.skeletons.DaC;
-import cl.niclabs.skandium.skeletons.Skeleton;
 
 public class MergeSort {
 	static Random random = new Random();
@@ -43,14 +44,15 @@ public class MergeSort {
 
 		System.out.println("Computing Mergesort threads="+THREADS+" size="+ SIZE + ".");
 
-		Skeleton<ArrayList<Integer>, ArrayList<Integer>> msort = new DaC<ArrayList<Integer>, ArrayList<Integer>>(
+		Skeleton<ArrayList<Integer>, ArrayList<Integer>> msort = new DaC<>(
 				new MSCondition(SIZE/(THREADS*2)), new MSSplit(), new MSExecute(),
 				new MSMerge());
 		
 		Skandium skandium = new Skandium(THREADS);
 
 		long init = System.currentTimeMillis();
-		Future<ArrayList<Integer>> future = msort.input(in);
+		Stream<ArrayList<Integer>, ArrayList<Integer>> stream = skandium.newStream(msort);
+		Future<ArrayList<Integer>> future = stream.input(in);
 		try {
 			out = future.get();
 			System.out.println((System.currentTimeMillis() - init)+"[ms]: "+out.toArray());
@@ -65,11 +67,11 @@ public class MergeSort {
 	}
 	
 	public static ArrayList<Integer> generate(int size){
-			                
-		ArrayList<Integer> array = new ArrayList<Integer>(size);
+
+		ArrayList<Integer> array = new ArrayList<>(size);
 		
 		for(int i=0;i<size;i++){
-			array.add(i, new Integer(random.nextInt()));
+			array.add(i, random.nextInt());
 		}
 
 		return array;
