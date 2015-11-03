@@ -11,3 +11,9 @@ build/**
 */logs/**
 logs/**
 lib/**
+
+#Intellij Idea files
+*.iml
+
+## Directory-based project format:
+.idea/
