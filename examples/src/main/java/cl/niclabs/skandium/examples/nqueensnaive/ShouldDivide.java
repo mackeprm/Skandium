@@ -21,15 +21,15 @@ import cl.niclabs.skandium.muscles.Condition;
 
 public class ShouldDivide implements Condition<Board> {
 
-	int threshold;
-	
-	public ShouldDivide(int threshold){
-		this.threshold=threshold;
-	}
-	
-	@Override
-	public boolean condition(Board p){
+    int threshold;
 
-		return p.depth > threshold;
-	}
+    public ShouldDivide(int threshold) {
+        this.threshold = threshold;
+    }
+
+    @Override
+    public Boolean apply(Board p) {
+
+        return p.depth > threshold;
+    }
 }

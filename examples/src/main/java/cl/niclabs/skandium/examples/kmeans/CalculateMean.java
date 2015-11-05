@@ -1,13 +1,13 @@
 package cl.niclabs.skandium.examples.kmeans;
 
 import cl.niclabs.skandium.examples.kmeans.util.XYPoint;
-import cl.niclabs.skandium.muscles.Execute;
 
 import java.util.List;
+import java.util.function.Function;
 
-public class CalculateMean implements Execute<List<XYPoint>,XYPoint> {
+public class CalculateMean implements Function<List<XYPoint>, XYPoint> {
     @Override
-    public XYPoint execute(List<XYPoint> cluster) throws Exception {
+    public XYPoint apply(List<XYPoint> cluster) {
         int sumX = 0;
         int sumY = 0;
         for(XYPoint point : cluster) {

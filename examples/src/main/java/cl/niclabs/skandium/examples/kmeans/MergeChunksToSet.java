@@ -8,10 +8,10 @@ import java.util.Collection;
 
 public class MergeChunksToSet implements Merge<Collection<ClusteredXYPoint>, Collection<ClusteredXYPoint>> {
     @Override
-    public Collection<ClusteredXYPoint> merge(final Collection<ClusteredXYPoint>[] param) throws Exception {
-        final int estimatedSize = param[0].size() * param.length;
+    public Collection<ClusteredXYPoint> apply(final Collection<Collection<ClusteredXYPoint>> param) {
+        final int estimatedSize = param.iterator().next().size() * param.size();
         final Collection<ClusteredXYPoint> result = new ArrayList<>(estimatedSize);
-        for(final Collection<ClusteredXYPoint> chunk : param) {
+        for (final Collection<ClusteredXYPoint> chunk : param) {
             result.addAll(chunk);
         }
         return result;

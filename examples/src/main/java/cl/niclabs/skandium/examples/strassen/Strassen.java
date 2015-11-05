@@ -17,13 +17,10 @@
  */
 package cl.niclabs.skandium.examples.strassen;
 
-import java.util.Random;
-import java.util.concurrent.Future;
+import cl.niclabs.skandium.impl.forkjoin.ForkJoinDaC;
 
-import cl.niclabs.skandium.skeletons.DaC;
-import cl.niclabs.skandium.skeletons.Skeleton;
-import cl.niclabs.skandium.Skandium;
-import cl.niclabs.skandium.Stream;
+import java.util.Random;
+import java.util.function.Function;
 
 /**
  * The main class to execute the Strassen Matrix multiplication algorithm.
@@ -49,33 +46,18 @@ public class Strassen{
     	System.out.println("Computing Strassen Matrix Multiplication threads="+THREADS+" size="+ SIZE+" subsize="+SUBSIZE+ ".");
     	
     	//1. Define the skeleton program structure
-    	 Skeleton<Operands, Matrix>  multiply = 
-    		 new DaC<Operands, Matrix>(   //We use a divide and conquer skeleton pattern
-    			 new ShouldDivide(SUBSIZE),
-    			 new DivideOperands(), 
+		Function<Operands, Matrix> multiply =
+				new ForkJoinDaC<>(   //We use a divide and conquer skeleton pattern
+						new ShouldDivide(SUBSIZE),
+						new DivideOperands(),
     			 new StandardMultiply(), 
     			 new ConquerMatrix());
     	 
-    	 //2. Create a new Skandium instance
-         Skandium skandium = new Skandium(THREADS);
-
-         //3. Open a Stream to input parameters
-         Stream<Operands, Matrix> stream = skandium.newStream(multiply);
-
          //4. Input parameters
          long init = System.currentTimeMillis();
-         Future<Matrix> future = stream.input(new Operands(newRandomMatrix(SIZE), newRandomMatrix(SIZE)));
-
-         //5. Do something else here.
-         //...
-         
-         //6. Block for the results
-         Matrix result = future.get();
-         System.out.println("Done:"+result.length()+"x"+result.length()+ "in "+(System.currentTimeMillis() - init)+"[ms]");
-     
-         //7. Shutdown the system
-         skandium.shutdown();
-    }
+		Matrix result = multiply.apply(new Operands(newRandomMatrix(SIZE), newRandomMatrix(SIZE)));
+		System.out.println("Done:" + result.length() + "x" + result.length() + "in " + (System.currentTimeMillis() - init) + "[ms]");
+	}
     
     /**
      * Creates a new Matrix with random content. 

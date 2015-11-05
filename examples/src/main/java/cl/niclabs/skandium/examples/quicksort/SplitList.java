@@ -20,20 +20,12 @@ package cl.niclabs.skandium.examples.quicksort;
 
 import cl.niclabs.skandium.muscles.Split;
 
-public class SplitList implements Split<Range, Range>{
-	
-	@Override
-	public Range[] split(Range r) throws Exception {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-        if (r.right <= r.left) throw new IllegalArgumentException("Right is smaller than Left");
-        
-        int i = partition(r.array, r.left, r.right);
-        
-        Range[] intervals = {new Range(r.array, r.left, i-1), new Range(r.array, i+1, r.right)};
-        
-        return intervals;
-	}   
-	
+public class SplitList implements Split<Range, Range> {
+
 	public static int partition(int[] a, int left, int right) {
 		int i = left - 1;
 		int j = right;
@@ -49,7 +41,7 @@ public class SplitList implements Split<Range, Range>{
 		return i;
 	}
 
-	private static boolean less(int x,  int y) {
+	private static boolean less(int x, int y) {
 		return (x < y);
 	}
 
@@ -57,5 +49,17 @@ public class SplitList implements Split<Range, Range>{
 		int swap = a[i];
 		a[i] = a[j];
 		a[j] = swap;
+	}
+
+	@Override
+	public Collection<Range> apply(Range r) {
+
+		if (r.right <= r.left) throw new IllegalArgumentException("Right is smaller than Left");
+
+		int i = partition(r.array, r.left, r.right);
+		final List<Range> intervals = new ArrayList<>(2);
+		intervals.add(new Range(r.array, r.left, i - 1));
+		intervals.add(new Range(r.array, i + 1, r.right));
+		return intervals;
 	}
 }

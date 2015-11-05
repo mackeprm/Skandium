@@ -18,52 +18,33 @@
 package cl.niclabs.skandium.skeletons;
 
 import cl.niclabs.skandium.muscles.Condition;
-import cl.niclabs.skandium.muscles.Execute;
+
+import java.util.function.Function;
 
 /**
- * An <code>If</code> {@link Skeleton} represents condition branching.
+ * An <code>If</code> {@link Function} represents condition branching.
  * Depending on the evaluation of a {@link Condition}, either one or another skeleton
  * program is executed.
- * 
- * @author mleyton
  *
- * @param <P> The input type of the {@link Skeleton}.
- * @param <R> The result type of the {@link Skeleton}. 
- * */
-public class If<P,R> extends AbstractSkeleton<P,R> {
+ * @param <P> The input type of the {@link Function}.
+ * @param <R> The result type of the {@link Function}.
+ * @author mleyton
+ */
+public abstract class If<P, R> implements Function<P, R> {
 
-	Skeleton<P,R> trueCase, falseCase;
-	Condition<P> condition;
-	
-	/**
-	 * The constructor.
-	 * 
-	 * @param condition Used to determine for each parameter, which skeleton is executed. 
-	 * @param trueCase Executed if the condition evaluates to true.
-	 * @param falseCase Executed if the conditino evaulates to false.
-	 */
-	public If(Condition<P> condition, Skeleton<P,R> trueCase, Skeleton<P,R> falseCase){
-		super();
-		this.condition = condition;
-		this.trueCase=trueCase;
-		this.falseCase=falseCase;
-	}
-	
-	/**
-	 * The constructor.
-	 * 
-	 * @param condition Used to determine for each parameter, which skeleton is executed. 
-	 * @param trueCase Executed if the condition evaluates to true.
-	 * @param falseCase Executed if the conditino evaulates to false.
-	 */
-	public If(Condition<P> condition, Execute<P,R> trueCase, Execute<P,R> falseCase){
-		this(condition,new Seq<P,R>(trueCase),new Seq<P,R>(falseCase));
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-    public void accept(SkeletonVisitor visitor) {
-        visitor.visit(this);
+    protected final Function<P, R> trueCase, falseCase;
+    protected final Condition<P> condition;
+
+    /**
+     * The constructor.
+     *
+     * @param condition Used to determine for each parameter, which skeleton is executed.
+     * @param trueCase  Executed if the condition evaluates to true.
+     * @param falseCase Executed if the conditino evaulates to false.
+     */
+    public If(Condition<P> condition, Function<P, R> trueCase, Function<P, R> falseCase) {
+        this.condition = condition;
+        this.trueCase = trueCase;
+        this.falseCase = falseCase;
     }
 }

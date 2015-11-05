@@ -17,15 +17,14 @@ public class SplitInClusters implements Split<Collection<ClusteredXYPoint>, List
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<XYPoint>[] split(Collection<ClusteredXYPoint> param) throws Exception {
-        final List<XYPoint>[] result;
-        result = (ArrayList<XYPoint>[]) new ArrayList<?>[numberOfClusterCenters];
+    public Collection<List<XYPoint>> apply(Collection<ClusteredXYPoint> param) {
+        final List<List<XYPoint>> result = new ArrayList<>(numberOfClusterCenters);
         for (ClusteredXYPoint clusterPoint : param) {
             Integer clusterIndex = clusterPoint.getClusterIndex();
-            if (result[clusterIndex] == null) {
-                result[clusterIndex] = new ArrayList<>();
+            if (result.get(clusterIndex) == null) {
+                result.set(clusterIndex, new ArrayList<>());
             }
-            result[clusterIndex].add(clusterPoint);
+            result.get(clusterIndex).add(clusterPoint);
         }
         return result;
     }

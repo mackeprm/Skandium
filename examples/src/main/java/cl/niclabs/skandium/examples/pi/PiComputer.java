@@ -19,8 +19,7 @@ package cl.niclabs.skandium.examples.pi;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
-import cl.niclabs.skandium.muscles.Execute;
+import java.util.function.Function;
 
 
 /**
@@ -34,8 +33,8 @@ import cl.niclabs.skandium.muscles.Execute;
  * @author mleyton
  *
  */
-public class PiComputer implements Execute<Interval, BigDecimal>{
-	
+public class PiComputer implements Function<Interval, BigDecimal> {
+
     private static final int ROUND_MODE = BigDecimal.ROUND_HALF_EVEN;
     private BigDecimal ZERO = new BigDecimal("0");
     private BigDecimal ONE = new BigDecimal("1");
@@ -48,7 +47,7 @@ public class PiComputer implements Execute<Interval, BigDecimal>{
     private BigInteger SIXTEEN = new BigInteger("16");
     
 	@Override
-	public BigDecimal execute(Interval interval) {
+    public BigDecimal apply(Interval interval) {
 
 		//scale trick to hold enough precision
 		int scale = (int) Math.floor(interval.end*1.2);

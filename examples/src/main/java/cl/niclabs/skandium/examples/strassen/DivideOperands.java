@@ -19,14 +19,17 @@ package cl.niclabs.skandium.examples.strassen;
 
 import cl.niclabs.skandium.muscles.Split;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 public class DivideOperands implements Split<Operands,Operands>{
 
 	@Override
-	public Operands[] split(Operands p){
+	public Collection<Operands> apply(Operands p) {
 		
 		int n = p.a.length();
-		
-		Matrix a11= p.a.part(0,0);
+
+		Matrix a11 = p.a.part(0, 0);
 		Matrix a12= p.a.part(0,n/2);
 		Matrix a21= p.a.part(n/2,0);
 		Matrix a22= p.a.part(n/2,n/2);
@@ -35,18 +38,14 @@ public class DivideOperands implements Split<Operands,Operands>{
 		Matrix b12= p.b.part(0,n/2);
 		Matrix b21= p.b.part(n/2,0);
 		Matrix b22= p.b.part(n/2,n/2);
-		
-		Operands[] results= {//All of these operands require multiplication
-			
-			new Operands(a11.add(a22), b11.add(b22)),
-			new Operands(a21.add(a22), b11),
-			new Operands(a11, b12.substract(b22)),
-			new Operands(a22, b21.substract(b11)),
-			new Operands(a11.add(a12), b22),
-			new Operands(a21.substract(a11),b11.substract(b12)),
-			new Operands(a12.substract(a22),b21.substract(b22))
-		};
-		 
-		return results;
+
+		return Arrays.<Operands>asList(//All of these operands require multiplication
+				new Operands(a11.add(a22), b11.add(b22)),
+				new Operands(a21.add(a22), b11),
+				new Operands(a11, b12.substract(b22)),
+				new Operands(a22, b21.substract(b11)),
+				new Operands(a11.add(a12), b22),
+				new Operands(a21.substract(a11), b11.substract(b12)),
+				new Operands(a12.substract(a22), b21.substract(b22)));
 	}
 }

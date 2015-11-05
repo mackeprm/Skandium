@@ -18,33 +18,22 @@
 package cl.niclabs.skandium.skeletons;
 
 import cl.niclabs.skandium.muscles.Condition;
-import cl.niclabs.skandium.muscles.Execute;
+
+import java.util.function.Function;
 
 /**
- * A <code></code> {@link Skeleton}
- * @author mleyton
+ * A <code></code> {@link Function}
  *
- * @param <P> The input and output type of the {@link Skeleton}.
- * */
-public class While<P> extends AbstractSkeleton<P,P> {
+ * @param <P> The input and output type of the {@link Function}.
+ * @author mleyton
+ */
+public abstract class While<P> implements Function<P, P> {
 
-	Skeleton<P,P> subskel;
-	Condition<P> condition;
-	
-	public While(Skeleton<P,P> skeleton, Condition<P> condition){
-		super();
-		this.subskel=skeleton;
-		this.condition = condition;
-	}
-	
-	public While(Execute<P,P> execute, Condition<P> condition){
-		this(new Seq<P,P>(execute), condition);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-    public void accept(SkeletonVisitor visitor) {
-        visitor.visit(this);
+    protected final Function<P, P> subskel;
+    protected final Condition<P> condition;
+
+    public While(Function<P, P> skeleton, Condition<P> condition) {
+        this.subskel = skeleton;
+        this.condition = condition;
     }
 }

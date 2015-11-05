@@ -17,34 +17,22 @@
  */
 package cl.niclabs.skandium.skeletons;
 
-import cl.niclabs.skandium.muscles.Execute;
+import java.util.function.Function;
 
 /**
- * A <code></code> {@link Skeleton}
- * @author mleyton
+ * A <code></code> {@link Function}
  *
- * @param <P> The input type of the {@link Skeleton}.
- * @param <R> The result type of the {@link Skeleton}. 
- * */
-public class Pipe<P,R> extends AbstractSkeleton<P,R> {
+ * @param <P> The input type of the {@link Function}.
+ * @param <R> The result type of the {@link Function}.
+ * @author mleyton
+ */
+public abstract class Pipe<P, R, X> implements Function<P, R> {
 
-	Skeleton<P,?> stage1;
-        Skeleton<?,R> stage2;
-	
-	public <X> Pipe(Skeleton<P,X> stage1, Skeleton<X,R> stage2){
-		super();
-		this.stage1=stage1;
-		this.stage2=stage2;
-	}
-	
-	public <X> Pipe(Execute<P,X> stage1,Execute<X,R> stage2){
-		this(new Seq<P,X>(stage1),new Seq<X,R>(stage2));
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-    public void accept(SkeletonVisitor visitor) {
-        visitor.visit(this);
+    protected final Function<P, X> stage1;
+    protected final Function<X, R> stage2;
+
+    public Pipe(Function<P, X> stage1, Function<X, R> stage2) {
+        this.stage1 = stage1;
+        this.stage2 = stage2;
     }
 }

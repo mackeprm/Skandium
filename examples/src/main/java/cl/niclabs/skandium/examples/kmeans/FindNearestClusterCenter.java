@@ -2,13 +2,13 @@ package cl.niclabs.skandium.examples.kmeans;
 
 import cl.niclabs.skandium.examples.kmeans.util.ClusteredXYPoint;
 import cl.niclabs.skandium.examples.kmeans.util.XYPoint;
-import cl.niclabs.skandium.muscles.Execute;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
-public class FindNearestClusterCenter implements Execute<Collection<XYPoint>,Collection<ClusteredXYPoint>> {
+public class FindNearestClusterCenter implements Function<Collection<XYPoint>, Collection<ClusteredXYPoint>> {
 
     private final List<XYPoint> clusterCenters;
 
@@ -17,7 +17,7 @@ public class FindNearestClusterCenter implements Execute<Collection<XYPoint>,Col
     }
 
     @Override
-    public Collection<ClusteredXYPoint> execute(Collection<XYPoint> param) throws Exception {
+    public Collection<ClusteredXYPoint> apply(Collection<XYPoint> param) {
         Collection<ClusteredXYPoint> result = new ArrayList<>(param.size());
         for(XYPoint inputPoint : param) {
             result.add(assignSinglePoint(inputPoint,clusterCenters));

@@ -19,30 +19,36 @@ package cl.niclabs.skandium.examples.strassen;
 
 import cl.niclabs.skandium.muscles.Merge;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
- * Reduces the results into a single matrix. 
- * 
+ * Reduces the results into a single matrix.
+ *
  * @author mleyton
  */
-public class ConquerMatrix implements Merge<Matrix, Matrix>{
+public class ConquerMatrix implements Merge<Matrix, Matrix> {
 
-	@Override
-	public Matrix merge(Matrix[] p){
-		
-		Matrix c11 = p[0].add(p[3]).substract(p[4]).add(p[6]); 
-		Matrix c12 = p[2].add(p[4]);
-		Matrix c21 = p[1].add(p[3]);
-		Matrix c22 = p[0].add(p[2]).substract(p[1]).add(p[5]);
-	
-		int n = c11.length()*2;
-		
-		Matrix C = new Matrix(n);
-		
-		C.copyInto(c11, 0,0);
-		C.copyInto(c12, 0,n/2);
-		C.copyInto(c21, n/2,0);
-		C.copyInto(c22, n/2,n/2);
+    @Override
+    public Matrix apply(Collection<Matrix> input) {
+        if (input instanceof List) {
+            List<Matrix> p = (List<Matrix>) input;
+            Matrix c11 = p.get(0).add(p.get(3)).substract(p.get(4)).add(p.get(6));
+            Matrix c12 = p.get(2).add(p.get(4));
+            Matrix c21 = p.get(1).add(p.get(3));
+            Matrix c22 = p.get(0).add(p.get(2)).substract(p.get(1)).add(p.get(5));
 
-		return C;
-	}
+            int n = c11.length() * 2;
+
+            Matrix C = new Matrix(n);
+
+            C.copyInto(c11, 0, 0);
+            C.copyInto(c12, 0, n / 2);
+            C.copyInto(c21, n / 2, 0);
+            C.copyInto(c22, n / 2, n / 2);
+            return C;
+        } else {
+            throw new IllegalStateException("not implemented for Collection. Please use List");
+        }
+    }
 }

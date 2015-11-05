@@ -17,15 +17,19 @@
  */
 package cl.niclabs.skandium.muscles;
 
+import java.util.Collection;
+import java.util.function.Function;
+
 /**
- * For a single parameter, a <code>Split</code> {@link Muscle} divides it into a list of parameters. 
+ * For a single parameter, a <code>Split</code> {@link Function} divides it into a list of parameters.
  * 
  * @author mleyton
  *
  * @param <P> The type of the input parameter.
  * @param <R> The type of the results in the list.
  */
-public interface Split<P,R> extends Muscle<P,R> {
+@FunctionalInterface
+public interface Split<P, R> extends Function<P, Collection<R>> {
 
 	/**
 	 * Implements the division behavior.
@@ -38,5 +42,6 @@ public interface Split<P,R> extends Muscle<P,R> {
 	 * @param param  The parameter to subdivide.
 	 * @return The list of subdivided parameters
 	 */
-	public R[] split(P param) throws Exception;
+	@Override
+	Collection<R> apply(P param);
 }

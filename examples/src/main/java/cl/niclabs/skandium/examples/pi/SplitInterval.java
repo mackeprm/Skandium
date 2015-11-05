@@ -19,30 +19,31 @@ package cl.niclabs.skandium.examples.pi;
 
 import cl.niclabs.skandium.muscles.Split;
 
-public class SplitInterval implements Split<Interval,Interval> {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-	int numParts;
-	
-	/**
-	 * @param numParts The number of Intervals to create from an Interval
-	 */
-	public SplitInterval(int numParts){
-		this.numParts=numParts;
-	}
-	
-	@Override
-	public Interval[] split(Interval param) throws Exception {
-		
-		int size = (param.end - param.start)/numParts;
-		Interval[] result = new Interval[numParts];
-		
-		for(int i=0; i<numParts; i++){
-			int start = param.start + size*i;
-			int end   = i < (numParts-1) ? param.start + size*(i+1)-1 : param.end;
-			
-			result[i] = new Interval(start, end);
-		}
-		
-		return result;
-	}
+public class SplitInterval implements Split<Interval, Interval> {
+
+    int numParts;
+
+    /**
+     * @param numParts The number of Intervals to create from an Interval
+     */
+    public SplitInterval(int numParts) {
+        this.numParts = numParts;
+    }
+
+    @Override
+    public Collection<Interval> apply(Interval param) {
+        int size = (param.end - param.start) / numParts;
+        List<Interval> result = new ArrayList<>(numParts);
+
+        for (int i = 0; i < numParts; i++) {
+            int start = param.start + size * i;
+            int end = i < (numParts - 1) ? param.start + size * (i + 1) - 1 : param.end;
+            result.add(new Interval(start, end));
+        }
+        return result;
+    }
 }

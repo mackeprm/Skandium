@@ -18,9 +18,9 @@
 
 package cl.niclabs.skandium.examples.mergesort;
 
-import java.util.ArrayList;
-
 import cl.niclabs.skandium.muscles.Condition;
+
+import java.util.ArrayList;
 
 public class MSCondition implements Condition<ArrayList<Integer>> {
 
@@ -32,7 +32,7 @@ public class MSCondition implements Condition<ArrayList<Integer>> {
 	}
 	
 	@Override
-	public synchronized boolean condition(ArrayList<Integer> p) throws Exception {
+	public synchronized Boolean apply(ArrayList<Integer> p) {
 		return p.size() > 1 && times++ < this.maxTimes;
 	}
 

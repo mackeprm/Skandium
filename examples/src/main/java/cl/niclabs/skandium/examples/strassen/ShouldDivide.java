@@ -28,8 +28,7 @@ public class ShouldDivide implements Condition<Operands> {
 	}
 	
 	@Override
-	public boolean condition(Operands p){
-
+	public Boolean apply(Operands p) {
 		return p.a.length() > threshold;
 	}
 }

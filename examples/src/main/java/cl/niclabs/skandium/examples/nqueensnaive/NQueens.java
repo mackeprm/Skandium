@@ -17,67 +17,47 @@
  */
 package cl.niclabs.skandium.examples.nqueensnaive;
 
-import java.util.Random;
-import java.util.concurrent.Future;
+import cl.niclabs.skandium.impl.forkjoin.ForkJoinDaC;
+import cl.niclabs.skandium.impl.forkjoin.ForkJoinMap;
 
-import cl.niclabs.skandium.skeletons.Map;
-import cl.niclabs.skandium.skeletons.DaC;
-import cl.niclabs.skandium.skeletons.Skeleton;
-import cl.niclabs.skandium.Skandium;
-import cl.niclabs.skandium.Stream;
+import java.util.Random;
+import java.util.function.Function;
 
 /**
  * The main class to execute a naive NQueens counting algorithm which does not consider board symmetries.
  * 
  * @author mleyton
  */
-public class NQueens{
+public class NQueens {
 
-	static Random random = new Random();
-	
-    public static void main(String[] args) throws Exception {
-       
-    	int THREADS = Runtime.getRuntime().availableProcessors();
-    	int BOARD = 15;  //Size board of the board
-    	int DEPTH = 3;
-    	
-    	if(args.length != 0) {
-    		THREADS = Integer.parseInt(args[0]);
-    		BOARD   = Integer.parseInt(args[1]);
-    		DEPTH   = Integer.parseInt(args[2]);
-    	}
-    	
-    	System.out.println("Computing NQueens threads="+THREADS+" board="+ BOARD+" depth="+DEPTH+ ".");
-    	
-    	//1. Define the skeleton program structure
-    	 Skeleton<Board, Count> subskel = new DaC<Board, Count>(   //We use a divide and conquer skeleton pattern
-    			 new ShouldDivide(DEPTH),  //Dive until the depth is "N-3" 
-    			 new DivideBoard(), 
-    			 new Solve(), 
-    			 new ConquerCount());
-    	
-    	 Skeleton<Board, Count> nqueens = //Always subdivide the first row.
-    		 new Map<Board, Count>(new DivideBoard(), subskel, new ConquerCount());
-    	 
-    	 //2. Create a new Skandium instance with 2 execution threads
-         Skandium skandium = new Skandium(THREADS);
+	private static Random random = new Random();
 
-         //3. Open a Stream to input parameters
-         Stream<Board, Count> stream = skandium.newStream(nqueens);
-         
-         //4. Input parameters
-         long init = System.currentTimeMillis();
-         Future<Count> future = stream.input(new Board(BOARD));
+	public static void main(String[] args) throws Exception {
 
-         //5. Do something else here.
-         //...
-         
-         //6. Block for the results
-         Count result = future.get();
-         System.out.println(result+" in "+(System.currentTimeMillis() - init)+"[ms]");
-         
-         //7. Shutdown the system
-         skandium.shutdown();
-         
-    }
+		int THREADS = Runtime.getRuntime().availableProcessors();
+		int BOARD = 15;  //Size board of the board
+		int DEPTH = 3;
+
+		if (args.length != 0) {
+			THREADS = Integer.parseInt(args[0]);
+			BOARD = Integer.parseInt(args[1]);
+			DEPTH = Integer.parseInt(args[2]);
+		}
+
+		System.out.println("Computing NQueens threads=" + THREADS + " board=" + BOARD + " depth=" + DEPTH + ".");
+
+		//1. Define the skeleton program structure
+		Function<Board, Count> subskel = new ForkJoinDaC<>(   //We use a divide and conquer skeleton pattern
+				new ShouldDivide(DEPTH),  //Dive until the depth is "N-3"
+				new DivideBoard(),
+				new Solve(),
+				new ConquerCount());
+
+		Function<Board, Count> nqueens = //Always subdivide the first row.
+				new ForkJoinMap<>(new DivideBoard(), subskel, new ConquerCount());
+
+		long init = System.currentTimeMillis();
+		Count result = nqueens.apply(new Board(BOARD));
+		System.out.println(result + " in " + (System.currentTimeMillis() - init) + "[ms]");
+	}
 }

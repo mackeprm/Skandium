@@ -17,21 +17,21 @@
  */
 package cl.niclabs.skandium.examples.pi;
 
-import java.math.BigDecimal;
-
 import cl.niclabs.skandium.muscles.Merge;
+
+import java.math.BigDecimal;
+import java.util.Collection;
 
 public class MergeResults implements Merge<BigDecimal, BigDecimal>{
 
 	@Override
-	public BigDecimal merge(BigDecimal[] param) throws Exception {
+	public BigDecimal apply(Collection<BigDecimal> param) {
 		
 		BigDecimal total = new BigDecimal(0);
 
-        for (int i = 0; i < param.length; i++) {
-        	total = total.add(param[i]);
-        }
-
-        return total;
+		for (BigDecimal bigDecimal : param) {
+			total = total.add(bigDecimal);
+		}
+		return total;
 	}
 }

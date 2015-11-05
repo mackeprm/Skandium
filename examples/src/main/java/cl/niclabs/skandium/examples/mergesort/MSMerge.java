@@ -18,30 +18,37 @@
 
 package cl.niclabs.skandium.examples.mergesort;
 
-import java.util.ArrayList;
-
 import cl.niclabs.skandium.muscles.Merge;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class MSMerge implements Merge<ArrayList<Integer>, ArrayList<Integer>> {
 
-	@Override
-	public ArrayList<Integer> merge(ArrayList<Integer>[] p) throws Exception {
-		ArrayList<Integer> left = p[0];
-		ArrayList<Integer> right = p[1];
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		while(left.size()>0 || right.size()>0) {
-			if (left.size()>0 && right.size()>0) {
-				if(left.get(0) <= right.get(0)) {
-					result.add(left.remove(0));
-				} else {
-					result.add(right.remove(0));
-				}
-			} else if (left.size()>0) {
-				result.add(left.remove(0));
-			} else if (right.size()>0) {
-				result.add(right.remove(0));
-			}
-		}
-		return result;
-	}
+    @Override
+    public ArrayList<Integer> apply(Collection<ArrayList<Integer>> p) {
+        if (p.size() != 2) {
+            throw new IllegalStateException("Merge param was not of size 2, actual size was: " + p.size());
+        } else {
+            Iterator<ArrayList<Integer>> iterator = p.iterator();
+            ArrayList<Integer> left = iterator.next();
+            ArrayList<Integer> right = iterator.next();
+            ArrayList<Integer> result = new ArrayList<>();
+            while (left.size() > 0 || right.size() > 0) {
+                if (left.size() > 0 && right.size() > 0) {
+                    if (left.get(0) <= right.get(0)) {
+                        result.add(left.remove(0));
+                    } else {
+                        result.add(right.remove(0));
+                    }
+                } else if (left.size() > 0) {
+                    result.add(left.remove(0));
+                } else if (right.size() > 0) {
+                    result.add(right.remove(0));
+                }
+            }
+            return result;
+        }
+    }
 }

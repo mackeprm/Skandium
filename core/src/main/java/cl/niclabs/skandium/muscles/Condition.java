@@ -17,14 +17,17 @@
  */
 package cl.niclabs.skandium.muscles;
 
+import java.util.function.Function;
+
 /**
- * For a parameter a <code>Condition</code> {@link Muscle} returns true or false. 
+ * For a parameter a <code>Condition</code> {@link Function} returns true or false.
  * 
  * @author mleyton
  *
  * @param <P> The type of the parameter.
  */
-public interface Condition<P> extends Muscle<P, Boolean> {
+@FunctionalInterface
+public interface Condition<P> extends Function<P, Boolean> {
 
 	/**
 	 * Implements the conditional behavior.
@@ -37,5 +40,6 @@ public interface Condition<P> extends Muscle<P, Boolean> {
 	 * @param param The parameter data to analyze.
 	 * @return true or false.
 	 */
-	public boolean condition(P param) throws Exception;
+	@Override
+	Boolean apply(P param);
 }

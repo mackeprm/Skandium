@@ -20,13 +20,12 @@ package cl.niclabs.skandium.examples.mergesort;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.Function;
 
-import cl.niclabs.skandium.muscles.Execute;
-
-public class MSExecute implements Execute<ArrayList<Integer>, ArrayList<Integer>> {
+public class MSExecute implements Function<ArrayList<Integer>, ArrayList<Integer>> {
 
 	@Override
-	public ArrayList<Integer> execute(ArrayList<Integer> p) throws Exception {
+	public ArrayList<Integer> apply(ArrayList<Integer> p) {
 		if (p.size()>1) {
 			Collections.sort(p);
 		}

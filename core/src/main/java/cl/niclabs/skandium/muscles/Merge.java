@@ -17,15 +17,19 @@
  */
 package cl.niclabs.skandium.muscles;
 
+import java.util.Collection;
+import java.util.function.Function;
+
 /**
- * For a list of parameters, a <code>Merge</code> {@link Muscle} reduces the list into a single one. 
+ * For a list of parameters, a <code>Merge</code> {@link Function} reduces the list into a single one.
  * 
  * @author mleyton
  *
  * @param <P> The type of the parameters in the list.
  * @param <R> The type of the single result parameter.
  */
-public interface Merge<P,R> extends Muscle<P,R> {
+@FunctionalInterface
+public interface Merge<P, R> extends Function<Collection<P>, R> {
 
 	/**
 	 * Implements the reduction behavior.
@@ -38,5 +42,6 @@ public interface Merge<P,R> extends Muscle<P,R> {
 	 * @param param The list of parameters to reduce.
 	 * @return The result of the reduction.
 	 */
-	public R merge(P[] param) throws Exception;
+	@Override
+	R apply(Collection<P> param);
 }

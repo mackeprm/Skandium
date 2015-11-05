@@ -1,19 +1,16 @@
 package cl.niclabs.skandium.examples.kmeans;
 
-import cl.niclabs.skandium.Skandium;
-import cl.niclabs.skandium.Stream;
 import cl.niclabs.skandium.examples.kmeans.util.ClusteredXYPoint;
 import cl.niclabs.skandium.examples.kmeans.util.DataFileReader;
 import cl.niclabs.skandium.examples.kmeans.util.XYPoint;
-import cl.niclabs.skandium.skeletons.Map;
-import cl.niclabs.skandium.skeletons.Pipe;
-import cl.niclabs.skandium.skeletons.Skeleton;
+import cl.niclabs.skandium.impl.forkjoin.ForkJoinMap;
+import cl.niclabs.skandium.impl.sequential.SequentialPipe;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Future;
+import java.util.function.Function;
 
 public class KMeans {
     public static void main(String args[]) throws Exception {
@@ -33,31 +30,27 @@ public class KMeans {
         DataFileReader reader = new DataFileReader();
         List<XYPoint> data = reader.readData(filename);
         List<XYPoint> clusterCenters = assignRandomClusterCentersFrom(data, numberOfClusterCenters);
-        Skandium skandium = new Skandium(numberOfThreads);
 
         //Define Skeletons:
         for (int i = 0; i < numberOfIterations; i++) {
             //1. Expectation Step
-            Skeleton<List<XYPoint>, Collection<ClusteredXYPoint>> expectationSkeleton = new Map<>
+            Function<List<XYPoint>, Collection<ClusteredXYPoint>> expectationSkeleton = new ForkJoinMap<>
                     (new SplitInUniformChunks(numberOfThreads), new FindNearestClusterCenter(clusterCenters), new MergeChunksToSet());
             //2. Maximization Step
-            Skeleton<Collection<ClusteredXYPoint>, List<XYPoint>> maximizationSkeleton = new Map<>(
+            Function<Collection<ClusteredXYPoint>, List<XYPoint>> maximizationSkeleton = new ForkJoinMap<>(
                     new SplitInClusters(numberOfClusterCenters), new CalculateMean(), new MergeClusterCenters()
             );
             //3. Piping the two skeletons:
-            Skeleton<List<XYPoint>, List<XYPoint>> kmeansIteration = new Pipe<>(
+            Function<List<XYPoint>, List<XYPoint>> kmeansIteration = new SequentialPipe<>(
                     expectationSkeleton, maximizationSkeleton
             );
 
-            final Stream<List<XYPoint>, List<XYPoint>> stream = skandium.newStream(kmeansIteration);
-            final Future<List<XYPoint>> newClusterCenters = stream.input(data);
-            clusterCenters = newClusterCenters.get();
+            clusterCenters = kmeansIteration.apply(data);
             int index = 0;
             for(XYPoint clusterCenter : clusterCenters) {
                 System.out.println(index++ + " : " + clusterCenter);
             }
         }
-        skandium.shutdown();
     }
 
     private static List<XYPoint> assignRandomClusterCentersFrom(final List<XYPoint> data, int numberOfClusterCenters) {

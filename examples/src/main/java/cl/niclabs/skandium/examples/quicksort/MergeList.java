@@ -20,13 +20,26 @@ package cl.niclabs.skandium.examples.quicksort;
 
 import cl.niclabs.skandium.muscles.Merge;
 
-public class MergeList implements Merge<Range, Range>{
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.RandomAccess;
+
+public class MergeList implements Merge<Range, Range> {
 
 	@Override
-	public Range merge(Range[] r) throws Exception {
-		
-		Range result = new Range( r[0].array, r[0].left, r[1].right);
-		
+	public Range apply(Collection<Range> r) {
+		final Range result;
+		if (r instanceof RandomAccess) {
+			List<Range> randomAccessParam = (List<Range>) r;
+			result = new Range(randomAccessParam.get(0).array, randomAccessParam.get(0).left, randomAccessParam.get(1).right);
+		} else {
+			final Iterator<Range> rangeIterator = r.iterator();
+			final Range left = rangeIterator.next();
+			final Range right = rangeIterator.next();
+			result = new Range(left.array, left.left, right.right);
+		}
+
 		return result;
 	}
 }

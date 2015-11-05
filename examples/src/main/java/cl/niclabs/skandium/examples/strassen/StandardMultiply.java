@@ -17,17 +17,17 @@
  */
 package cl.niclabs.skandium.examples.strassen;
 
-import cl.niclabs.skandium.muscles.Execute;
+import java.util.function.Function;
 
 /**
  * The base case of the recursion is to use standar multiplication.
  * 
  * @author mleyton
  */
-public class StandardMultiply implements Execute<Operands, Matrix>{
+public class StandardMultiply implements Function<Operands, Matrix> {
 
 	@Override
-	public Matrix execute(Operands o) {
+	public Matrix apply(Operands o) {
 		return o.a.multiply(o.b);
 	}
 }

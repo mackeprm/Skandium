@@ -17,45 +17,27 @@
  */
 package cl.niclabs.skandium.skeletons;
 
-import cl.niclabs.skandium.muscles.Execute;
+import java.util.function.Function;
 
 /**
- * A <code>Farm</code> {@link Skeleton} provides task replication or master-worker like parallelism.
- * 
+ * A <code>Farm</code> {@link Function} provides task replication or master-worker like parallelism.
+ * <p>
  * If possible (unsynchronized muscles), parameters submitted to a <code>Farm</code> are computed in parallel with respect to each other.
- * 
- * @author mleyton
  *
- * @param <P> The input type of the {@link Skeleton}.
- * @param <R> The result type of the {@link Skeleton}. 
- * */
-public class Farm<P,R> extends AbstractSkeleton<P,R> {
+ * @param <P> The input type of the {@link Function}.
+ * @param <R> The result type of the {@link Function}.
+ * @author mleyton
+ */
+public abstract class Farm<P, R> implements Function<P, R> {
 
-	Skeleton<P,R> subskel;
-	
-	/**
-	 * The constructor.
-	 * 
-	 * @param skeleton The skeleton pattern to replicate.
-	 */
-	public Farm(Skeleton<P,R> skeleton){
-		super();
-		this.subskel=skeleton;
-	}
-	
-	/**
-	 * The constructor.
-	 * 
-	 * @param execute The execute pattern to replicate.
-	 */
-	public Farm(Execute<P,R> execute){
-		this(new Seq<P,R>(execute));
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-    public void accept(SkeletonVisitor visitor) {
-        visitor.visit(this);
+    protected final Function<P, R> subskel;
+
+    /**
+     * The constructor.
+     *
+     * @param skeleton The skeleton pattern to replicate.
+     */
+    public Farm(Function<P, R> skeleton) {
+        this.subskel = skeleton;
     }
 }

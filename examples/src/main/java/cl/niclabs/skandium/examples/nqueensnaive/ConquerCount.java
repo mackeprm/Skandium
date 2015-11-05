@@ -19,18 +19,17 @@ package cl.niclabs.skandium.examples.nqueensnaive;
 
 import cl.niclabs.skandium.muscles.Merge;
 
+import java.util.Collection;
+
 public class ConquerCount implements Merge<Count, Count> {
 
-	@Override
-	public Count merge(Count[] results) throws Exception {
-		
-		Count c = new Count(results.length);
-		
-		for(int i=0; i<results.length; i++){
-			c.add(results[i]);
-		}
-		
-		return c;
-	}
+    @Override
+    public Count apply(Collection<Count> results) {
+        Count c = new Count(results.size());
+        for (Count result : results) {
+            c.add(result);
+        }
+        return c;
+    }
 
 }

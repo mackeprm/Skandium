@@ -17,48 +17,28 @@
  */
 package cl.niclabs.skandium.skeletons;
 
-import cl.niclabs.skandium.muscles.Execute;
-import cl.niclabs.skandium.muscles.Muscle;
+import java.util.function.Function;
 
 /**
- * A <code>For</code> {@link Skeleton} provides a fixed iteration.
- * The nested skeleton code is executed a fixed amount of times. 
- * 
- * @author mleyton
+ * A <code>For</code> {@link Function} provides a fixed iteration.
+ * The nested skeleton code is executed a fixed amount of times.
  *
- * @param <P> The input and result type of the {@link Skeleton}.
- * */
-public class For<P> extends AbstractSkeleton<P,P> {
+ * @param <P> The input and result type of the {@link Function}.
+ * @author mleyton
+ */
+public abstract class For<P> implements Function<P, P> {
 
-	Skeleton<P,P> subskel;
-	int times;
-	
-	/**
-	 * The constructor.
-	 * 
-	 * @param skeleton The skeleton pattern to execute.
-	 * @param times The number of times to execute the skeleton.
-	 */
-	public For(Skeleton<P,P> skeleton, int times){
-		super();
-		this.subskel=skeleton;
-		this.times = times;
-	}
-	
-	/**
-	 * The constructor.
-	 * 
-	 * @param execute The skeleton pattern to execute.
-	 * @param times The number of times to execute the {@link Muscle}.
-	 */
-	public For(Execute<P,P> execute, int times){
-		this(new Seq<P,P>(execute), times);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-    public void accept(SkeletonVisitor visitor) {
-        visitor.visit(this);
+    protected final Function<P, P> subskel;
+    protected final int times;
+
+    /**
+     * The constructor.
+     *
+     * @param skeleton The skeleton pattern to execute.
+     * @param times    The number of times to execute the skeleton.
+     */
+    public For(Function<P, P> skeleton, int times) {
+        this.subskel = skeleton;
+        this.times = times;
     }
 }

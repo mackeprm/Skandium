@@ -17,61 +17,60 @@
  */
 package cl.niclabs.skandium.examples.pi;
 
-import java.math.BigDecimal;
-import java.util.concurrent.Future;
+import cl.niclabs.skandium.impl.forkjoin.ForkJoinMap;
 
-import cl.niclabs.skandium.Skandium;
-import cl.niclabs.skandium.Stream;
-import cl.niclabs.skandium.skeletons.Map;
-import cl.niclabs.skandium.skeletons.Skeleton;
+import java.math.BigDecimal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.function.Function;
 
 /**
  * <p>The main entry point to compute Pi with a given number of decimals.</p>
- * 
- * <p>The operations (add, multiply, etc..) are performed using BigDecimal types, 
+ * <p>
+ * <p>The operations (add, multiply, etc..) are performed using BigDecimal types,
  * which are slower when precision (scale) is increased. Hence, this application experiences
  * superlinear speedups.</p>
- * 
- * <p>To see this behavior play around with the SplitInterval(x), where x is 1, 2, 4, 8, 16, etc. 
+ * <p>
+ * <p>To see this behavior play around with the SplitInterval(x), where x is 1, 2, 4, 8, 16, etc.
  * The bigger the number of subintervals, the smaller the time waiting for the last subinterval to finish, which
  * is the most expensive in CPU time.</p>
- * 
+ *
  * @author mleyton
  */
 public class PI {
 
-	public static void main(String[] args) throws Exception {
-    	
-		int THREADS  = Runtime.getRuntime().availableProcessors();
-		int DECIMALS = 3000;  //Number of decimals to compute
-    	int PARTS = Runtime.getRuntime().availableProcessors()*4; //Number of parts to divide the interval
-    	
-    	if(args.length != 0) {
-    		THREADS  = Integer.parseInt(args[0]);
-    		DECIMALS = Integer.parseInt(args[1]);
-    		PARTS    = Integer.parseInt(args[2]);
-    	}
-    	System.out.println("Computing Pi threads="+THREADS+" decimals="+ DECIMALS+" parts="+PARTS+ ".");
-    	
-    	Skandium skandium = new Skandium(THREADS);
-    	
-		// 1. Define the skeleton program structure
-		Skeleton<Interval, BigDecimal> pi = new Map<Interval, BigDecimal>(
-				new SplitInterval(PARTS), //number of parts to divide by
-				new PiComputer(),
-				new MergeResults());
+    public static void main(String[] args) throws Exception {
 
-		Stream<Interval, BigDecimal> stream = skandium.newStream(pi);
-		
-		// 2. Input parameters with the defauls singleton Skandium object
+        int THREADS = Runtime.getRuntime().availableProcessors();
+        int DECIMALS = 3000;  //Number of decimals to compute
+        int PARTS = Runtime.getRuntime().availableProcessors() * 4; //Number of parts to divide the interval
+
+        if (args.length != 0) {
+            THREADS = Integer.parseInt(args[0]);
+            DECIMALS = Integer.parseInt(args[1]);
+            PARTS = Integer.parseInt(args[2]);
+        }
+        System.out.println("Computing Pi threads=" + THREADS + " decimals=" + DECIMALS + " parts=" + PARTS + ".");
+
+        // 1. Define the skeleton program structure
+        Function<Interval, BigDecimal> pi = new ForkJoinMap<>(
+                new SplitInterval(PARTS), //number of parts to divide by
+                new PiComputer(),
+                new MergeResults());
+
+
+        // 2. Input parameters with the defauls singleton Skandium object
         long init = System.currentTimeMillis();
-		Future<BigDecimal> future = stream.input(new Interval(0, DECIMALS));
+        BigDecimal result = pi.apply(new Interval(0, DECIMALS));
 
-		// 3. Do something else here.
-		// ...
+        System.out.println(THREADS + ", " + DECIMALS + ", " + PARTS + ", " + (System.currentTimeMillis() - init) + "[ms]");
+        System.out.println(Arrays.toString(getHash(result)));
+    }
 
-		// 4. Block for the results
-		BigDecimal result = future.get();
-		System.out.println((System.currentTimeMillis() - init)+"[ms]: "+result);
-	}
+    private static byte[] getHash(BigDecimal result) throws NoSuchAlgorithmException {
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.update(result.byteValue());
+        return md5.digest();
+    }
 }

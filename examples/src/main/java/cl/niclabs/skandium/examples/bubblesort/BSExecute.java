@@ -19,11 +19,10 @@
 package cl.niclabs.skandium.examples.bubblesort;
 
 import java.util.ArrayList;
-
-import cl.niclabs.skandium.muscles.Execute;
+import java.util.function.Function;
 
 public class BSExecute implements
-		Execute<ArrayList<Integer>, ArrayList<Integer>> {
+		Function<ArrayList<Integer>, ArrayList<Integer>> {
 
 	int times;
 	
@@ -32,7 +31,7 @@ public class BSExecute implements
 	}
 
 	@Override
-	public ArrayList<Integer> execute(ArrayList<Integer> p) throws Exception {
+	public ArrayList<Integer> apply(ArrayList<Integer> p) {
 		int n = p.size();
 		for (int i = n-1; i > times; i--) {
 			if (p.get(i - 1).compareTo(p.get(i)) > 0) {
