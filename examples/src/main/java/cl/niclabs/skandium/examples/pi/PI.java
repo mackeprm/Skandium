@@ -75,7 +75,8 @@ public class PI {
 
 		// 4. Block for the results
 		BigDecimal result = future.get();
-		System.out.println((System.currentTimeMillis() - init) + "[ms]: " + Arrays.toString(getHash(result)));
+		System.out.println("time:" + (System.currentTimeMillis() - init) + "[ms]");
+		System.out.println(Arrays.toString(getHash(result)));
 		skandium.shutdown();
 	}
 
