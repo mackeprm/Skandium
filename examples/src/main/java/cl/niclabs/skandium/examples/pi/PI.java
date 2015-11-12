@@ -76,6 +76,7 @@ public class PI {
 		// 4. Block for the results
 		BigDecimal result = future.get();
 		System.out.println((System.currentTimeMillis() - init) + "[ms]: " + Arrays.toString(getHash(result)));
+		skandium.shutdown();
 	}
 
 	private static byte[] getHash(BigDecimal result) throws NoSuchAlgorithmException {
