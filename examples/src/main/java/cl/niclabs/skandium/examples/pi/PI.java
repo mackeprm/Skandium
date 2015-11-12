@@ -17,13 +17,16 @@
  */
 package cl.niclabs.skandium.examples.pi;
 
-import java.math.BigDecimal;
-import java.util.concurrent.Future;
-
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
 import cl.niclabs.skandium.skeletons.Map;
 import cl.niclabs.skandium.skeletons.Skeleton;
+
+import java.math.BigDecimal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.concurrent.Future;
 
 /**
  * <p>The main entry point to compute Pi with a given number of decimals.</p>
@@ -72,6 +75,12 @@ public class PI {
 
 		// 4. Block for the results
 		BigDecimal result = future.get();
-		System.out.println((System.currentTimeMillis() - init)+"[ms]: "+result);
+		System.out.println((System.currentTimeMillis() - init) + "[ms]: " + Arrays.toString(getHash(result)));
+	}
+
+	private static byte[] getHash(BigDecimal result) throws NoSuchAlgorithmException {
+		MessageDigest md5 = MessageDigest.getInstance("MD5");
+		md5.update(result.byteValue());
+		return md5.digest();
 	}
 }
