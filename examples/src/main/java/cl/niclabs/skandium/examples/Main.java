@@ -19,17 +19,16 @@
 package cl.niclabs.skandium.examples;
 
 import cl.niclabs.skandium.Skandium;
+import cl.niclabs.skandium.examples.bubblesort.BubbleSort;
+import cl.niclabs.skandium.examples.mergesort.MergeSort;
 import cl.niclabs.skandium.examples.nqueensnaive.NQueens;
 import cl.niclabs.skandium.examples.pi.PI;
 import cl.niclabs.skandium.examples.quicksort.QuickSort;
-import cl.niclabs.skandium.examples.mergesort.MergeSort;
-import cl.niclabs.skandium.examples.bubblesort.BubbleSort;
 import cl.niclabs.skandium.examples.strassen.Strassen;
 
 public class Main {
 
 	public static void main(String args[]) throws Exception{
-		System.out.println("args length:"+args.length);
 		if(args.length < 3 || args.length > 4){
 			usage();
 		}
