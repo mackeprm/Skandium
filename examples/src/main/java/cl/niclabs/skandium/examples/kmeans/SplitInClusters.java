@@ -1,14 +1,14 @@
 package cl.niclabs.skandium.examples.kmeans;
 
-import cl.niclabs.skandium.examples.kmeans.util.ClusteredXYPoint;
-import cl.niclabs.skandium.examples.kmeans.util.XYPoint;
+import cl.niclabs.skandium.examples.kmeans.model.ClusteredPoint;
+import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.muscles.Split;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class SplitInClusters implements Split<Collection<ClusteredXYPoint>, List<XYPoint>> {
+public class SplitInClusters implements Split<Collection<ClusteredPoint>, List<Point>> {
     final int numberOfClusterCenters;
 
     public SplitInClusters(int numberOfClusterCenters) {
@@ -17,10 +17,10 @@ public class SplitInClusters implements Split<Collection<ClusteredXYPoint>, List
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<XYPoint>[] split(Collection<ClusteredXYPoint> param) throws Exception {
-        final List<XYPoint>[] result;
-        result = (ArrayList<XYPoint>[]) new ArrayList<?>[numberOfClusterCenters];
-        for (ClusteredXYPoint clusterPoint : param) {
+    public List<Point>[] split(Collection<ClusteredPoint> param) {
+        final List<Point>[] result;
+        result = (ArrayList<Point>[]) new ArrayList<?>[numberOfClusterCenters];
+        for (ClusteredPoint clusterPoint : param) {
             Integer clusterIndex = clusterPoint.getClusterIndex();
             if (result[clusterIndex] == null) {
                 result[clusterIndex] = new ArrayList<>();
