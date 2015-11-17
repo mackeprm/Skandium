@@ -2,6 +2,7 @@ package cl.niclabs.skandium.examples.kmeans.simulated;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
+import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.ClusteredPoint;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
@@ -14,31 +15,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Future;
 
-public class SimulatedKMeans {
+public class SimulatedKMeans extends AbstractKmeans {
+    public SimulatedKMeans(String name, String[] args) {
+        super(name, args);
+    }
+
     public static void main(String args[]) throws Exception {
-        int numberOfThreads = Runtime.getRuntime().availableProcessors();
-        int numberOfClusterCenters = 2;
-        int numberOfIterations = 10;
-        int dimension = 3;
-        int numberOfValues = 10_000;
-        long seed = 4711l;
+        SimulatedKMeans kmeans = new SimulatedKMeans("Simulated K-Means", args);
+        System.out.println(kmeans.toString());
+        kmeans.run();
+    }
 
-        if (args.length != 0) {
-            numberOfThreads = Integer.parseInt(args[0]);
-            numberOfValues = Integer.parseInt(args[1]);
-            numberOfClusterCenters = Integer.parseInt(args[2]);
-            dimension = Integer.parseInt(args[3]);
-            numberOfIterations = Integer.parseInt(args[4]);
-        }
-
-        System.out.println("Simulated K-Means: Threads=" + numberOfThreads +
-                        " n=" + numberOfValues +
-                        " k=" + numberOfClusterCenters +
-                        " d=" + dimension +
-                        " i=" + numberOfIterations
-        );
-
-
+    public void run() throws Exception {
         final RandomDataSetGenerator randomDataSetGenerator = new RandomDataSetGenerator(dimension, seed);
         final List<Point> data = randomDataSetGenerator.generatePoints(numberOfValues);
         List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);

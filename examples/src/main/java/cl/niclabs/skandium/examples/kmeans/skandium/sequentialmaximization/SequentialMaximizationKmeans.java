@@ -2,45 +2,34 @@ package cl.niclabs.skandium.examples.kmeans.skandium.sequentialmaximization;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
+import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.examples.kmeans.skandium.*;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
-import cl.niclabs.skandium.skeletons.Kmeans;
+import cl.niclabs.skandium.skeletons.SMKmeans;
 
 import java.util.List;
 import java.util.concurrent.Future;
 
-public class NativeKmeans {
+public class SequentialMaximizationKmeans extends AbstractKmeans {
 
+
+    public SequentialMaximizationKmeans(String name, String[] args) {
+        super(name, args);
+    }
 
     public static void main(String[] args) throws Exception {
-        int numberOfThreads = Runtime.getRuntime().availableProcessors();
-        int numberOfClusterCenters = 2;
-        int numberOfIterations = 10;
-        int dimension = 3;
-        int numberOfValues = 10_000;
-        long seed = 4711l;
+        AbstractKmeans kmeans = new SequentialMaximizationKmeans("native K-Means (sequiental maximization)", args);
+        System.out.println(kmeans.toString());
+        kmeans.run();
+    }
 
-        if (args.length != 0) {
-            numberOfThreads = Integer.parseInt(args[0]);
-            numberOfValues = Integer.parseInt(args[1]);
-            numberOfClusterCenters = Integer.parseInt(args[2]);
-            dimension = Integer.parseInt(args[3]);
-            numberOfIterations = Integer.parseInt(args[4]);
-        }
-
-
-        System.out.println("native K-Means (sequiental maximization): Threads=" + numberOfThreads +
-                        " n=" + numberOfValues +
-                        " k=" + numberOfClusterCenters +
-                        " d=" + dimension +
-                        " i=" + numberOfIterations
-        );
-
+    @Override
+    public void run() throws Exception {
         try (final Skandium skandium = new Skandium(numberOfThreads)) {
 
-            Kmeans<Model> kmeans = new Kmeans<>(
+            SMKmeans<Model> kmeans = new SMKmeans<>(
                     new SplitModelInChunks(numberOfThreads),
                     new ChunkExpectationStep(),
                     new MergeChunksToClusteredModel(),
