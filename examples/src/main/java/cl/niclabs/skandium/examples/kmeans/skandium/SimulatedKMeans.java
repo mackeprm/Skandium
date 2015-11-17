@@ -1,28 +1,27 @@
-package cl.niclabs.skandium.examples.kmeans.simulated;
+package cl.niclabs.skandium.examples.kmeans.skandium;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
 import cl.niclabs.skandium.examples.kmeans.*;
 import cl.niclabs.skandium.examples.kmeans.model.ClusteredPoint;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
+import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
 import cl.niclabs.skandium.skeletons.Map;
 import cl.niclabs.skandium.skeletons.Pipe;
 import cl.niclabs.skandium.skeletons.Skeleton;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Future;
 
 public class SimulatedKMeans {
     public static void main(String args[]) throws Exception {
         int numberOfThreads = Runtime.getRuntime().availableProcessors();
-        int numberOfClusterCenters = 5;
+        int numberOfClusterCenters = 2;
         int numberOfIterations = 10;
         int dimension = 3;
-        int numberOfValues = 200000;
+        int numberOfValues = 40;
         long seed = 4711l;
 
         if (args.length != 0) {
@@ -43,7 +42,7 @@ public class SimulatedKMeans {
 
         final RandomDataSetGenerator randomDataSetGenerator = new RandomDataSetGenerator(dimension, seed);
         final List<Point> data = randomDataSetGenerator.generatePoints(numberOfValues);
-        List<Point> clusterCenters = assignRandomClusterCentersFrom(data, numberOfClusterCenters, seed);
+        List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
 
         Skandium skandium = new Skandium(numberOfThreads);
 
@@ -73,14 +72,5 @@ public class SimulatedKMeans {
             System.out.println(index++ + " : " + clusterCenter);
         }
         skandium.shutdown();
-    }
-
-    private static List<Point> assignRandomClusterCentersFrom(final List<Point> data, int numberOfClusterCenters, long seed) {
-        final List<Point> result = new ArrayList<>(numberOfClusterCenters);
-        final Random random = new Random(seed);
-        for (int i = 0; i < numberOfClusterCenters; i++) {
-            result.add(data.get(random.nextInt(data.size())));
-        }
-        return result;
     }
 }

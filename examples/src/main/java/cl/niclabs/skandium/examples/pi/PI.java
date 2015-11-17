@@ -46,7 +46,7 @@ public class PI {
 	public static void main(String[] args) throws Exception {
     	
 		int THREADS  = Runtime.getRuntime().availableProcessors();
-		int DECIMALS = 3000;  //Number of decimals to compute
+		int DECIMALS = 6000;  //Number of decimals to compute
     	int PARTS = Runtime.getRuntime().availableProcessors()*4; //Number of parts to divide the interval
     	
     	if(args.length != 0) {

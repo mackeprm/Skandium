@@ -117,12 +117,12 @@ public class StackBuilder implements SkeletonVisitor {
 
 	@Override
 	public <P, R> void visit(Map<P, R> skeleton) {
-		
+
 		strace.add(skeleton.trace);
 		StackBuilder subStackBuilder = new StackBuilder(strace);
-		
+
 		skeleton.skeleton.accept(subStackBuilder);
-		
+
 		stack.push(new MapInst(skeleton.split, subStackBuilder.stack ,skeleton.merge, getStraceAsArray()));
 	}
 
@@ -150,7 +150,18 @@ public class StackBuilder implements SkeletonVisitor {
 		
 		stack.push(new DaCInst(skeleton.condition, skeleton.split, subStackBuilder.stack, skeleton.merge, getStraceAsArray()));
 	}
-	
+
+	@Override
+	public <P> void visit(Kmeans<P> skeleton) {
+		strace.add(skeleton.trace);
+		StackBuilder expectationStepStackBuilder = new StackBuilder(strace);
+		skeleton.expectationStep.accept(expectationStepStackBuilder);
+		//StackBuilder maximizationStepStackBuilder = new StackBuilder(strace);
+		//skeleton.maximizationStep.accept(maximizationStepStackBuilder);
+
+		stack.push(new KmeansInstruction(skeleton.convergenceCriterion, skeleton.split,expectationStepStackBuilder.stack,skeleton.merge,skeleton.maximizationStep,getStraceAsArray()));
+	}
+
 	@Override
 	public <P, R> void visit(AbstractSkeleton<P, R> skeleton) {
 		throw new RuntimeException("Should not be here!");

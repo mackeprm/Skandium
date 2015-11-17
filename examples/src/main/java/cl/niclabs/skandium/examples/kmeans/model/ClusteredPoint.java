@@ -17,4 +17,9 @@ public class ClusteredPoint extends Point {
     public int getClusterIndex() {
         return clusterIndex;
     }
+
+    @Override
+    public String toString() {
+        return "[" + clusterIndex + "]" + super.toString();
+    }
 }
