@@ -1,6 +1,5 @@
 package cl.niclabs.skandium.instructions;
 
-import cl.niclabs.skandium.kmeans.Pair;
 import cl.niclabs.skandium.muscles.Condition;
 import cl.niclabs.skandium.muscles.Execute;
 import cl.niclabs.skandium.muscles.Merge;
@@ -25,8 +24,10 @@ public class KmeansLoopInst extends AbstractInstruction {
         this.maximizationStep = maximizationStep;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <P> Object interpret(P param, Stack<Instruction> stack, List<Stack<Instruction>> children) throws Exception {
+        //called with a pair <old,new>
         if(!convergenceCriterion.condition(param)) {
             stack.push(copy());
             stack.push(new KmeansIterationInstruction(strace, split, expectationStep, merge, maximizationStep));

@@ -29,17 +29,14 @@ public class KmeansInstruction extends AbstractInstruction {
     @SuppressWarnings("unchecked")
     @Override
     public <P> Object interpret(P param, Stack<Instruction> stack, List<Stack<Instruction>> children) throws Exception {
-        /*if(convergenceCriterion.condition(param)){
-            Stack<Instruction> newStack = new Stack<>();
-            newStack.add(this.copy());
-            children.add(newStack);
-        }*/
-        //TODO hier muss alles mit vergleich und iteration passieren
         if(param instanceof Pair) {
+            //when param is an instance of pair we are being called from the kmeans loop => kmeans iterations are done.
+            //in this case we return the last computed model:
             return ((Pair) param).getSecond();
         } else {
+            //When Param is a Model only, then we start the K-Means loop:
             stack.push(new KmeansLoopInst(strace,convergenceCriterion,split,expectationStep,merge,maximizationStep));
-            return new Pair<P,P>(param, null);
+            return new Pair<>(param, param);
         }
     }
 

@@ -22,16 +22,18 @@ public class KmeansIterationInstruction extends AbstractInstruction {
         this.maximizationStep = maximizationStep;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <P> Object interpret(P param, Stack<Instruction> stack, List<Stack<Instruction>> children) throws Exception {
         if(param instanceof Pair) {
-            Object[] params = split.split(((Pair) param).getFirst());
+            Object[] params = split.split(((Pair) param).getSecond());
 
             for(int i=0;i<params.length;i++){
                 children.add(copyStack(this.expectationStep));
             }
 
-            stack.push(new KmeansMaximizationInst(strace, maximizationStep, ((Pair) param).getFirst()));
+            //Treat pair.getSecond as old Model in Maximization Instruction
+            stack.push(new KmeansMaximizationInst(strace, maximizationStep, ((Pair) param).getSecond()));
             stack.push(new MergeInst(merge, strace));
 
             return params;
