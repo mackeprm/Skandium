@@ -17,7 +17,8 @@
  */
 package cl.niclabs.skandium.examples.pi;
 
-import cl.niclabs.skandium.impl.forkjoin.ForkJoinMap;
+import cl.niclabs.skandium.impl.skandium.Skandium;
+import cl.niclabs.skandium.impl.skandium.SkandiumMap;
 
 import java.math.BigDecimal;
 import java.security.MessageDigest;
@@ -43,7 +44,7 @@ public class PI {
     public static void main(String[] args) throws Exception {
 
         int THREADS = Runtime.getRuntime().availableProcessors();
-        int DECIMALS = 3000;  //Number of decimals to compute
+        int DECIMALS = 6000;  //Number of decimals to compute
         int PARTS = Runtime.getRuntime().availableProcessors() * 4; //Number of parts to divide the interval
 
         if (args.length != 0) {
@@ -51,21 +52,25 @@ public class PI {
             DECIMALS = Integer.parseInt(args[1]);
             PARTS = Integer.parseInt(args[2]);
         }
+        //TODO autocloseable with try
+        Skandium skandium = new Skandium(THREADS);
         System.out.println("Computing Pi threads=" + THREADS + " decimals=" + DECIMALS + " parts=" + PARTS + ".");
 
         // 1. Define the skeleton program structure
-        Function<Interval, BigDecimal> pi = new ForkJoinMap<>(
+        Function<Interval, BigDecimal> pi = new SkandiumMap<>(
                 new SplitInterval(PARTS), //number of parts to divide by
                 new PiComputer(),
-                new MergeResults());
+                new MergeResults(),
+                skandium);
 
 
         // 2. Input parameters with the defauls singleton Skandium object
         long init = System.currentTimeMillis();
         BigDecimal result = pi.apply(new Interval(0, DECIMALS));
 
-        System.out.println(THREADS + ", " + DECIMALS + ", " + PARTS + ", " + (System.currentTimeMillis() - init) + "[ms]");
+        System.out.println("time:" + (System.currentTimeMillis() - init) + "[ms]");
         System.out.println(Arrays.toString(getHash(result)));
+        skandium.shutdown();
     }
 
     private static byte[] getHash(BigDecimal result) throws NoSuchAlgorithmException {
