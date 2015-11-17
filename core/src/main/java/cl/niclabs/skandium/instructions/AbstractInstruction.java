@@ -26,11 +26,11 @@ import java.util.Stack;
  * 
  * @author mleyton
  */
-abstract class AbstractInstruction implements Instruction {
+public abstract class AbstractInstruction implements Instruction {
 
-	final StackTraceElement[] strace;
-	
-	AbstractInstruction(StackTraceElement[] strace){
+	public final StackTraceElement[] strace;
+
+	public AbstractInstruction(StackTraceElement[] strace) {
 		//this.stackTraceElements = strace.toArray(new StackTraceElement[strace.size()]);
 		this.strace = strace;
 	}
@@ -41,9 +41,9 @@ abstract class AbstractInstruction implements Instruction {
 	 * @param stack The stack to be copied.
 	 * @return The copy of the stack.
 	 */
-	static Stack<Instruction> copyStack(Stack<Instruction> stack){
-	
-		Stack<Instruction> newStack= new Stack<Instruction>();
+	public static Stack<Instruction> copyStack(Stack<Instruction> stack) {
+
+		Stack<Instruction> newStack = new Stack<>();
 		
 		for(int i=0; i < stack.size(); i++){
 			

@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans;
+package cl.niclabs.skandium.examples.kmeans.simulated;
 
 import cl.niclabs.skandium.examples.kmeans.model.ClusteredPoint;
 import cl.niclabs.skandium.examples.kmeans.model.Point;

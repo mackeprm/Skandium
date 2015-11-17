@@ -1,5 +1,7 @@
-package cl.niclabs.skandium.instructions;
+package cl.niclabs.skandium.kmeans.sequentialmaximization;
 
+import cl.niclabs.skandium.instructions.AbstractInstruction;
+import cl.niclabs.skandium.instructions.Instruction;
 import cl.niclabs.skandium.kmeans.Pair;
 import cl.niclabs.skandium.muscles.Condition;
 import cl.niclabs.skandium.muscles.Execute;

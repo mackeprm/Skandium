@@ -17,11 +17,12 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import cl.niclabs.skandium.instructions.*;
+import cl.niclabs.skandium.kmeans.sequentialmaximization.KmeansInstruction;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import cl.niclabs.skandium.instructions.*;
 
 /**
  * Using the visitor pattern, this class navigates a skeleton structure (ie nested skeletons),
@@ -36,8 +37,8 @@ public class StackBuilder implements SkeletonVisitor {
 	
 	public StackBuilder() {
 		super();
-		this.stack = new Stack<Instruction>();
-		this.strace = new Stack<StackTraceElement>();
+		this.stack = new Stack<>();
+		this.strace = new Stack<>();
 	}
 
 	public StackBuilder(Stack<StackTraceElement> trace){
@@ -128,8 +129,8 @@ public class StackBuilder implements SkeletonVisitor {
 
 	@Override
 	public <P, R> void visit(Fork<P, R> skeleton) {
-		
-		List <Stack<Instruction>> stacks= new ArrayList<Stack<Instruction>>();
+
+		List<Stack<Instruction>> stacks = new ArrayList<>();
 
 		strace.add(skeleton.trace);
 		for(Skeleton s:skeleton.skeletons){	
@@ -168,7 +169,7 @@ public class StackBuilder implements SkeletonVisitor {
 	}
 	
 	private Stack<StackTraceElement> copyStackTrace(){
-		Stack<StackTraceElement> strace = new Stack<StackTraceElement>();
+		Stack<StackTraceElement> strace = new Stack<>();
 		strace.addAll(this.strace);
 		
 		return strace;

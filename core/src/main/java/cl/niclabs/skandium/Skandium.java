@@ -27,10 +27,10 @@ import cl.niclabs.skandium.system.TaskExecutor;
  * 
  * @author mleyton
  */
-public class Skandium {
+public class Skandium implements AutoCloseable {
 
-	TaskExecutor executor;
 	private static Skandium singleton = null;
+	TaskExecutor executor;
 	
 	/**
 	 * A constructor which creates a new Skandium instance with a maximum number of computation 
@@ -52,39 +52,44 @@ public class Skandium {
 	}
 	
 	/**
+	 * @return The default singleton instance of Skandium.
+	 */
+	public synchronized static Skandium getSingleton() {
+
+		if (singleton == null || singleton.executor.isShutdown()) {
+			singleton = new Skandium();
+		}
+
+		return singleton;
+	}
+
+	public static String version() {
+		return "1.0b2";
+	}
+
+	/**
 	 * Factory method is used to create a new {@link Stream}, which in turn can be used to input parameters for computation.
 	 * @param <P> The type of skeleton program's input.
 	 * @param <R> The type of the skeleton programs' result.
 	 * @param skeleton  The skeleton program which will be used to compute each parameter entered through the {@link Stream}.
 	 * @return A new {@link Stream} associated with the specified {@link Skeleton} program.
 	 */
-	public <P,R> Stream<P,R> newStream(Skeleton<P,R> skeleton){
-		
-		if(skeleton == null) throw new IllegalArgumentException("The specified skeleton cannot be null");
-		
-		return new Stream<P,R>(skeleton, executor);
+	public <P, R> Stream<P, R> newStream(Skeleton<P, R> skeleton) {
+
+		if (skeleton == null) throw new IllegalArgumentException("The specified skeleton cannot be null");
+
+		return new Stream<>(skeleton, executor);
 	}
-	
+
 	/**
 	 * This method shuts down the <code>Skandium</code> instance by shutting down the {@link java.util.concurrent.ExecutorService}.
 	 */
-	public void shutdown(){
+	public void shutdown() {
 		executor.shutdown();
 	}
 
-	/**
-	 * @return The default singleton instance of Skandium.
-	 */
-	public synchronized static Skandium getSingleton() {
-
-		if(singleton == null || singleton.executor.isShutdown()){
-			singleton = new Skandium();
-		}
-		
-		return singleton;
-	}
-	
-	public static String version(){
-		return "1.0b2";
+	@Override
+	public void close() throws Exception {
+		shutdown();
 	}
 }

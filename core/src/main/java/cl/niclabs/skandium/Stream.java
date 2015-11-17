@@ -17,12 +17,12 @@
  */
 package cl.niclabs.skandium;
 
-import java.util.concurrent.Future;
-
 import cl.niclabs.skandium.skeletons.Skeleton;
 import cl.niclabs.skandium.skeletons.StackBuilder;
 import cl.niclabs.skandium.system.Task;
 import cl.niclabs.skandium.system.TaskExecutor;
+
+import java.util.concurrent.Future;
 
 /**
  * A <code>Stream</code> is a channel to input parameters for execution.
@@ -39,7 +39,7 @@ import cl.niclabs.skandium.system.TaskExecutor;
  * @param <P>  The type of the input parameter.
  * @param <R>  The type of the computatino's result.
  */
-public class Stream<P,R> {
+public class Stream<P, R> implements AutoCloseable {
 
 	TaskExecutor executor;
 	@SuppressWarnings("unchecked")
@@ -89,5 +89,10 @@ public class Stream<P,R> {
 		}
 
 		return results;
+	}
+
+	@Override
+	public void close() throws Exception {
+		executor.shutdown();
 	}
 }
