@@ -11,7 +11,7 @@ import cl.niclabs.skandium.muscles.Split;
 import java.util.List;
 import java.util.Stack;
 
-public class KmeansInstruction extends AbstractInstruction {
+public class SMKmeansInstruction extends AbstractInstruction {
 
     Condition convergenceCriterion;
     Split split;
@@ -19,7 +19,7 @@ public class KmeansInstruction extends AbstractInstruction {
     Merge merge;
     Execute maximizationStep;
 
-    public KmeansInstruction(Condition convergenceCriterion, Split split, Stack<Instruction> expectationStep, Merge merge, Execute maximizationStep, StackTraceElement[] strace) {
+    public SMKmeansInstruction(Condition convergenceCriterion, Split split, Stack<Instruction> expectationStep, Merge merge, Execute maximizationStep, StackTraceElement[] strace) {
         super(strace);
         this.convergenceCriterion = convergenceCriterion;
         this.split = split;
@@ -44,6 +44,6 @@ public class KmeansInstruction extends AbstractInstruction {
 
     @Override
     public Instruction copy() {
-        return new KmeansInstruction(convergenceCriterion, split, copyStack(expectationStep), merge, maximizationStep, strace);
+        return new SMKmeansInstruction(convergenceCriterion, split, copyStack(expectationStep), merge, maximizationStep, strace);
     }
 }

@@ -43,7 +43,9 @@ public interface SkeletonVisitor {
 
     public <P,R> void visit(Fork<P,R> skeleton);
 
-    public <P> void visit(Kmeans<P> skeleton);
+    public <P> void visit(MMKmeans<P> skeleton);
+
+    public <P> void visit(SMKmeans<P> skeleton);
 
     public <P,R> void visit(AbstractSkeleton<P,R> skeleton);
 }

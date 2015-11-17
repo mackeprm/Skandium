@@ -18,7 +18,8 @@
 package cl.niclabs.skandium.skeletons;
 
 import cl.niclabs.skandium.instructions.*;
-import cl.niclabs.skandium.kmeans.sequentialmaximization.KmeansInstruction;
+import cl.niclabs.skandium.kmeans.mapmaximization.MMKmeansInstruction;
+import cl.niclabs.skandium.kmeans.sequentialmaximization.SMKmeansInstruction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,15 +154,29 @@ public class StackBuilder implements SkeletonVisitor {
 	}
 
 	@Override
-	public <P> void visit(Kmeans<P> skeleton) {
+	public <P> void visit(SMKmeans<P> skeleton) {
 		strace.add(skeleton.trace);
 		StackBuilder expectationStepStackBuilder = new StackBuilder(strace);
 		skeleton.expectationStep.accept(expectationStepStackBuilder);
 		//StackBuilder maximizationStepStackBuilder = new StackBuilder(strace);
 		//skeleton.maximizationStep.accept(maximizationStepStackBuilder);
 
-		stack.push(new KmeansInstruction(skeleton.convergenceCriterion, skeleton.split,expectationStepStackBuilder.stack,skeleton.merge,skeleton.maximizationStep,getStraceAsArray()));
+		stack.push(new SMKmeansInstruction(skeleton.convergenceCriterion, skeleton.split, expectationStepStackBuilder.stack, skeleton.merge, skeleton.maximizationStep, getStraceAsArray()));
 	}
+
+	@Override
+	public <P> void visit(MMKmeans<P> skeleton) {
+		strace.add(skeleton.trace);
+
+		StackBuilder expectationStepStackBuilder = new StackBuilder(strace);
+		skeleton.expectationStep.accept(expectationStepStackBuilder);
+
+		StackBuilder maximizationStepBuilder = new StackBuilder(strace);
+		skeleton.maximizationStep.accept(maximizationStepBuilder);
+
+		stack.push(new MMKmeansInstruction(skeleton.convergenceCriterion, expectationStepStackBuilder.stack, maximizationStepBuilder.stack, getStraceAsArray()));
+	}
+
 
 	@Override
 	public <P, R> void visit(AbstractSkeleton<P, R> skeleton) {

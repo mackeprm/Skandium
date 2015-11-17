@@ -1,7 +1,9 @@
-package cl.niclabs.skandium.examples.kmeans.skandium;
+package cl.niclabs.skandium.examples.kmeans.skandium.sequentialmaximization;
 
 import cl.niclabs.skandium.examples.kmeans.model.MaximizationSteps;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
+import cl.niclabs.skandium.examples.kmeans.skandium.ClusteredModel;
+import cl.niclabs.skandium.examples.kmeans.skandium.Model;
 import cl.niclabs.skandium.muscles.Execute;
 
 import java.util.ArrayList;

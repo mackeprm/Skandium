@@ -34,7 +34,7 @@ public class KmeansLoopInst extends AbstractInstruction {
             stack.push(copy());
             stack.push(new KmeansIterationInstruction(strace, split, expectationStep, merge, maximizationStep));
         } else {
-            stack.push(new KmeansInstruction(convergenceCriterion,split,expectationStep,merge,maximizationStep,strace));
+            stack.push(new SMKmeansInstruction(convergenceCriterion, split, expectationStep, merge, maximizationStep, strace));
         }
         return param;
     }

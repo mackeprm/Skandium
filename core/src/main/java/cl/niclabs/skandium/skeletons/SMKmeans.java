@@ -6,7 +6,7 @@ import cl.niclabs.skandium.muscles.Execute;
 import cl.niclabs.skandium.muscles.Merge;
 import cl.niclabs.skandium.muscles.Split;
 
-public class Kmeans<P> extends AbstractSkeleton<P, P> {
+public class SMKmeans<P> extends AbstractSkeleton<P, P> {
 
 
     Condition<Pair<P,P>> convergenceCriterion;
@@ -15,7 +15,7 @@ public class Kmeans<P> extends AbstractSkeleton<P, P> {
     Merge<?,?> merge;
     Execute<?,P> maximizationStep;
 
-    public <I,O,C> Kmeans(Split<P,I> split, Execute<I,O> expectationStep, Merge<O,C> merge, Execute<C, P> maximizationStep, Condition<Pair<P,P>> convergenceCriterion) {
+    public <I, O, C> SMKmeans(Split<P, I> split, Execute<I, O> expectationStep, Merge<O, C> merge, Execute<C, P> maximizationStep, Condition<Pair<P, P>> convergenceCriterion) {
         this.convergenceCriterion = convergenceCriterion;
         this.split = split;
         this.expectationStep = new Seq<>(expectationStep);
