@@ -25,6 +25,7 @@ package cl.niclabs.skandium.muscles;
  * @param <P> The type of the parameter.
  * @param <R> The type of the result.
  */
+@FunctionalInterface
 public interface Execute<P,R> extends Muscle<P,R>{
 
 	/**
@@ -38,5 +39,5 @@ public interface Execute<P,R> extends Muscle<P,R>{
 	 * @param param The parameter data to compute.
 	 * @return The result of the computation.
 	 */
-	public R execute(P param) throws Exception;
+	R execute(P param) throws Exception;
 }

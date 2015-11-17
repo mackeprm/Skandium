@@ -24,6 +24,7 @@ package cl.niclabs.skandium.muscles;
  *
  * @param <P> The type of the parameter.
  */
+@FunctionalInterface
 public interface Condition<P> extends Muscle<P, Boolean> {
 
 	/**
@@ -37,5 +38,5 @@ public interface Condition<P> extends Muscle<P, Boolean> {
 	 * @param param The parameter data to analyze.
 	 * @return true or false.
 	 */
-	public boolean condition(P param) throws Exception;
+	boolean condition(P param) throws Exception;
 }

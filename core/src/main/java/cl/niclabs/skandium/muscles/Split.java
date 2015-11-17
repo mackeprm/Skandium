@@ -25,6 +25,7 @@ package cl.niclabs.skandium.muscles;
  * @param <P> The type of the input parameter.
  * @param <R> The type of the results in the list.
  */
+@FunctionalInterface
 public interface Split<P,R> extends Muscle<P,R> {
 
 	/**
@@ -38,5 +39,5 @@ public interface Split<P,R> extends Muscle<P,R> {
 	 * @param param  The parameter to subdivide.
 	 * @return The list of subdivided parameters
 	 */
-	public R[] split(P param) throws Exception;
+	R[] split(P param) throws Exception;
 }

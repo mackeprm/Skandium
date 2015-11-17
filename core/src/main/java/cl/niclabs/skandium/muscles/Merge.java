@@ -25,6 +25,7 @@ package cl.niclabs.skandium.muscles;
  * @param <P> The type of the parameters in the list.
  * @param <R> The type of the single result parameter.
  */
+@FunctionalInterface
 public interface Merge<P,R> extends Muscle<P,R> {
 
 	/**
@@ -38,5 +39,5 @@ public interface Merge<P,R> extends Muscle<P,R> {
 	 * @param param The list of parameters to reduce.
 	 * @return The result of the reduction.
 	 */
-	public R merge(P[] param) throws Exception;
+	R merge(P[] param) throws Exception;
 }
