@@ -5,7 +5,7 @@ import cl.niclabs.skandium.kmeans.Pair;
 import cl.niclabs.skandium.muscles.Condition;
 
 
-public class GlobalIterationsConvergenceCriterion implements Condition<Pair<Model,Model>>{
+public class GlobalIterationsConvergenceCriterion<T> implements Condition<Pair<T, T>> {
     private final int maxCounter;
     private int counter;
 
@@ -15,7 +15,7 @@ public class GlobalIterationsConvergenceCriterion implements Condition<Pair<Mode
     }
 
     @Override
-    public boolean condition(Pair<Model,Model> param) throws Exception {
+    public boolean condition(Pair<T, T> param) throws Exception {
         counter++;
         return counter > maxCounter;
     }

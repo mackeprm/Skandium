@@ -45,7 +45,7 @@ public class MapMaximizationKmeans extends AbstractKmeans {
             );
 
             MMKmeans<Model> kmeans = new MMKmeans<>(
-                    new GlobalIterationsConvergenceCriterion(numberOfIterations),
+                    new GlobalIterationsConvergenceCriterion<>(numberOfIterations),
                     expectationSkeleton,
                     maximizationSkeleton
             );

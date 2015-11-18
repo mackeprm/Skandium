@@ -6,7 +6,7 @@ public abstract class AbstractKmeans {
     public int numberOfClusterCenters = 2;
     public int numberOfIterations = 10;
     public int dimension = 3;
-    public int numberOfValues = 10_000;
+    public int numberOfValues = 50_000;
     public long seed = 4711l;
 
 

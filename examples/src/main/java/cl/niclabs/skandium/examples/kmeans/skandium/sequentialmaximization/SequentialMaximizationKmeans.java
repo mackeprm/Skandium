@@ -34,7 +34,7 @@ public class SequentialMaximizationKmeans extends AbstractKmeans {
                     new ChunkExpectationStep(),
                     new MergeChunksToClusteredModel(),
                     new CalculateNewModelFromClusters(),
-                    new GlobalIterationsConvergenceCriterion(numberOfIterations)
+                    new GlobalIterationsConvergenceCriterion<>(numberOfIterations)
             );
 
             final RandomDataSetGenerator randomDataSetGenerator = new RandomDataSetGenerator(dimension, seed);
