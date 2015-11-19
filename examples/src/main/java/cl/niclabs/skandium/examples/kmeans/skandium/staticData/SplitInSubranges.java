@@ -11,8 +11,13 @@ public class SplitInSubranges implements Split<Range, Range> {
 
     @Override
     public Range[] split(Range param) throws Exception {
-        final Range[] result = new Range[numberOfChunks];
+        final Range[] result;
         final int dataSize = param.right;
+        if (dataSize % numberOfChunks == 0) {
+            result = new Range[numberOfChunks];
+        } else {
+            result = new Range[numberOfChunks + 1];
+        }
         final int chunkLength = Math.floorDiv(dataSize, numberOfChunks);
         if (chunkLength < 1) {
             throw new IllegalStateException("input was smaller than number of chunks");

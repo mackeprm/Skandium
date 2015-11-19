@@ -24,6 +24,7 @@ public class SHPKmeans extends AbstractKmeans {
 
     public static void main(String[] args) throws Exception {
         AbstractKmeans kmeans = new SHPKmeans(args);
+        kmeans.numberOfThreads = 3;
         System.out.println(kmeans.toString());
         kmeans.run();
     }
