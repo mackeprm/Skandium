@@ -3,17 +3,18 @@ package cl.niclabs.skandium.kmeans.mapmaximization;
 
 import cl.niclabs.skandium.instructions.AbstractInstruction;
 import cl.niclabs.skandium.instructions.Instruction;
+import cl.niclabs.skandium.kmeans.KmeansMaximizationInst;
 import cl.niclabs.skandium.kmeans.Pair;
 
 import java.util.List;
 import java.util.Stack;
 
-public class KmeansIterationInstruction extends AbstractInstruction {
+public class MMKmeansIterationInstruction extends AbstractInstruction {
 
     Stack<Instruction> expectationStep;
     Stack<Instruction> maximizationStep;
 
-    public KmeansIterationInstruction(StackTraceElement[] strace, Stack<Instruction> expectationStep, Stack<Instruction> maximizationStep) {
+    public MMKmeansIterationInstruction(StackTraceElement[] strace, Stack<Instruction> expectationStep, Stack<Instruction> maximizationStep) {
         super(strace);
         this.expectationStep = expectationStep;
         this.maximizationStep = maximizationStep;
@@ -39,6 +40,6 @@ public class KmeansIterationInstruction extends AbstractInstruction {
 
     @Override
     public Instruction copy() {
-        return null;
+        return new MMKmeansIterationInstruction(strace, copyStack(expectationStep), copyStack(maximizationStep));
     }
 }

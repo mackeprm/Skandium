@@ -1,8 +1,7 @@
-package cl.niclabs.skandium.kmeans.mapmaximization;
+package cl.niclabs.skandium.kmeans;
 
 import cl.niclabs.skandium.instructions.AbstractInstruction;
 import cl.niclabs.skandium.instructions.Instruction;
-import cl.niclabs.skandium.kmeans.Pair;
 
 import java.util.List;
 import java.util.Stack;
@@ -24,6 +23,6 @@ public class KmeansMaximizationInst extends AbstractInstruction {
 
     @Override
     public Instruction copy() {
-        return null;
+        return new KmeansMaximizationInst(strace, oldParam);
     }
 }

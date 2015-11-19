@@ -11,13 +11,13 @@ import cl.niclabs.skandium.muscles.Split;
 import java.util.List;
 import java.util.Stack;
 
-public class KmeansIterationInstruction extends AbstractInstruction {
+public class SMKmeansIterationInstruction extends AbstractInstruction {
     Split split;
     Stack<Instruction> expectationStep;
     Merge merge;
     Execute maximizationStep;
 
-    public KmeansIterationInstruction(StackTraceElement[] strace, Split split, Stack<Instruction> expectationStep, Merge merge, Execute maximizationStep) {
+    public SMKmeansIterationInstruction(StackTraceElement[] strace, Split split, Stack<Instruction> expectationStep, Merge merge, Execute maximizationStep) {
         super(strace);
         this.split = split;
         this.expectationStep = expectationStep;
@@ -36,7 +36,7 @@ public class KmeansIterationInstruction extends AbstractInstruction {
             }
 
             //Treat pair.getSecond as old Model in Maximization Instruction
-            stack.push(new KmeansMaximizationInst(strace, maximizationStep, ((Pair) param).getSecond()));
+            stack.push(new SMKmeansMaximizationInst(strace, maximizationStep, ((Pair) param).getSecond()));
             stack.push(new MergeInst(merge, strace));
 
             return params;
@@ -47,6 +47,6 @@ public class KmeansIterationInstruction extends AbstractInstruction {
 
     @Override
     public Instruction copy() {
-        return null;
+        return new SMKmeansIterationInstruction(strace, split, copyStack(expectationStep), merge, maximizationStep);
     }
 }

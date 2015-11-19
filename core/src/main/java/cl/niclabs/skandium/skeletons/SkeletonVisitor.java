@@ -24,28 +24,30 @@ package cl.niclabs.skandium.skeletons;
  * @author mleyton
  */
 public interface SkeletonVisitor {
-	
-    public <P,R> void visit(DaC<P,R> skeleton);
-    
-    public <P,R> void visit(Farm<P, R> skeleton);
 
-    public <P,R> void visit(Pipe<P,R> skeleton);
+    <P, R> void visit(DaC<P, R> skeleton);
 
-    public <P,R> void visit(Seq<P,R> skeleton);
+    <P, R> void visit(Farm<P, R> skeleton);
 
-    public <P,R> void visit(If<P,R> skeleton);
+    <P, R> void visit(Pipe<P, R> skeleton);
 
-    public <P> void visit(While<P> skeleton);
+    <P, R> void visit(Seq<P, R> skeleton);
 
-    public <P> void visit(For<P> skeleton);
+    <P, R> void visit(If<P, R> skeleton);
 
-    public <P,R> void visit(Map<P,R> skeleton);
+    <P> void visit(While<P> skeleton);
 
-    public <P,R> void visit(Fork<P,R> skeleton);
+    <P> void visit(For<P> skeleton);
 
-    public <P> void visit(MMKmeans<P> skeleton);
+    <P, R> void visit(Map<P, R> skeleton);
 
-    public <P> void visit(SMKmeans<P> skeleton);
+    <P, R> void visit(Fork<P, R> skeleton);
 
-    public <P,R> void visit(AbstractSkeleton<P,R> skeleton);
+    <P> void visit(MMKmeans<P> skeleton);
+
+    <P> void visit(SMKmeans<P> skeleton);
+
+    <P> void visit(HPKmeans<P> skeleton);
+
+    <P, R> void visit(AbstractSkeleton<P, R> skeleton);
 }

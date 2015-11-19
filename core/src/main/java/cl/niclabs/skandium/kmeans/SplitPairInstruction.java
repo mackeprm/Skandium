@@ -1,23 +1,22 @@
-package cl.niclabs.skandium.kmeans.mapmaximization;
+package cl.niclabs.skandium.kmeans;
 
 import cl.niclabs.skandium.instructions.AbstractInstruction;
 import cl.niclabs.skandium.instructions.Instruction;
-import cl.niclabs.skandium.kmeans.Pair;
 import cl.niclabs.skandium.muscles.Condition;
 
 import java.util.List;
 import java.util.Stack;
 
-public class MMKmeansInstruction extends AbstractInstruction {
-    Condition convergenceCriterion;
-    Stack<Instruction> expectationStep;
-    Stack<Instruction> maximizationStep;
+public class SplitPairInstruction extends AbstractInstruction {
 
-    public MMKmeansInstruction(Condition convergenceCriterion, Stack<Instruction> expectationStep, Stack<Instruction> maximizationStep, StackTraceElement[] strace) {
+
+    private Condition convergenceCriterion;
+    private Instruction iterationInstruction;
+
+    public SplitPairInstruction(StackTraceElement[] strace, Condition convergenceCriterion, Instruction iterationInstruction) {
         super(strace);
         this.convergenceCriterion = convergenceCriterion;
-        this.expectationStep = expectationStep;
-        this.maximizationStep = maximizationStep;
+        this.iterationInstruction = iterationInstruction;
     }
 
     @SuppressWarnings("unchecked")
@@ -29,13 +28,16 @@ public class MMKmeansInstruction extends AbstractInstruction {
             return ((Pair) param).getSecond();
         } else {
             //When Param is a Model only, then we start the K-Means loop:
-            stack.push(new KmeansLoopInst(strace, convergenceCriterion, expectationStep, maximizationStep));
+            stack.push(new LoopInstruction(strace,
+                    convergenceCriterion,
+                    copy(),
+                    iterationInstruction));
             return new Pair<>(param, param);
         }
     }
 
     @Override
     public Instruction copy() {
-        return new MMKmeansInstruction(convergenceCriterion, copyStack(expectationStep), copyStack(expectationStep), strace);
+        return new SplitPairInstruction(strace, convergenceCriterion, iterationInstruction.copy());
     }
 }

@@ -8,12 +8,12 @@ import cl.niclabs.skandium.muscles.Execute;
 import java.util.List;
 import java.util.Stack;
 
-public class KmeansMaximizationInst extends AbstractInstruction {
+public class SMKmeansMaximizationInst extends AbstractInstruction {
 
     private Execute maximizationStep;
     private Object oldParam;
 
-    public <P> KmeansMaximizationInst(StackTraceElement[] strace, Execute maximizationStep, P oldParam) {
+    public <P> SMKmeansMaximizationInst(StackTraceElement[] strace, Execute maximizationStep, P oldParam) {
         super(strace);
         this.maximizationStep = maximizationStep;
         this.oldParam = oldParam;
@@ -28,6 +28,6 @@ public class KmeansMaximizationInst extends AbstractInstruction {
 
     @Override
     public Instruction copy() {
-        return null;
+        return new SMKmeansMaximizationInst(strace, maximizationStep, oldParam);
     }
 }

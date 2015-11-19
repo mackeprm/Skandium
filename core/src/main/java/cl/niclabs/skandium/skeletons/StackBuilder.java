@@ -18,8 +18,10 @@
 package cl.niclabs.skandium.skeletons;
 
 import cl.niclabs.skandium.instructions.*;
-import cl.niclabs.skandium.kmeans.mapmaximization.MMKmeansInstruction;
-import cl.niclabs.skandium.kmeans.sequentialmaximization.SMKmeansInstruction;
+import cl.niclabs.skandium.kmeans.SplitPairInstruction;
+import cl.niclabs.skandium.kmeans.hybridpartition.HPKmeansIterationInstruction;
+import cl.niclabs.skandium.kmeans.mapmaximization.MMKmeansIterationInstruction;
+import cl.niclabs.skandium.kmeans.sequentialmaximization.SMKmeansIterationInstruction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,10 +160,10 @@ public class StackBuilder implements SkeletonVisitor {
 		strace.add(skeleton.trace);
 		StackBuilder expectationStepStackBuilder = new StackBuilder(strace);
 		skeleton.expectationStep.accept(expectationStepStackBuilder);
-		//StackBuilder maximizationStepStackBuilder = new StackBuilder(strace);
-		//skeleton.maximizationStep.accept(maximizationStepStackBuilder);
 
-		stack.push(new SMKmeansInstruction(skeleton.convergenceCriterion, skeleton.split, expectationStepStackBuilder.stack, skeleton.merge, skeleton.maximizationStep, getStraceAsArray()));
+		final Instruction kmeansIteration = new SMKmeansIterationInstruction(getStraceAsArray(), skeleton.split, expectationStepStackBuilder.stack, skeleton.merge, skeleton.maximizationStep);
+		final Instruction splitPairInstruction = new SplitPairInstruction(getStraceAsArray(), skeleton.convergenceCriterion, kmeansIteration);
+		stack.push(splitPairInstruction);
 	}
 
 	@Override
@@ -174,7 +176,24 @@ public class StackBuilder implements SkeletonVisitor {
 		StackBuilder maximizationStepBuilder = new StackBuilder(strace);
 		skeleton.maximizationStep.accept(maximizationStepBuilder);
 
-		stack.push(new MMKmeansInstruction(skeleton.convergenceCriterion, expectationStepStackBuilder.stack, maximizationStepBuilder.stack, getStraceAsArray()));
+		final Instruction kmeansIteration = new MMKmeansIterationInstruction(getStraceAsArray(), expectationStepStackBuilder.stack, maximizationStepBuilder.stack);
+		final Instruction splitPairInstruction = new SplitPairInstruction(getStraceAsArray(), skeleton.convergenceCriterion, kmeansIteration);
+		stack.push(splitPairInstruction);
+	}
+
+	@Override
+	public <P> void visit(HPKmeans<P> skeleton) {
+		strace.add(skeleton.trace);
+
+		StackBuilder expectationStepStackBuilder = new StackBuilder(strace);
+		skeleton.expectationStep.accept(expectationStepStackBuilder);
+
+		StackBuilder maximizationStepBuilder = new StackBuilder(strace);
+		skeleton.maximizationStep.accept(maximizationStepBuilder);
+
+		final Instruction kmeansIteration = new HPKmeansIterationInstruction(getStraceAsArray(), skeleton.split, expectationStepStackBuilder.stack, skeleton.partition, maximizationStepBuilder.stack, skeleton.merge);
+		final Instruction splitPairInstruction = new SplitPairInstruction(getStraceAsArray(), skeleton.convergenceCriterion, kmeansIteration);
+		stack.push(splitPairInstruction);
 	}
 
 
