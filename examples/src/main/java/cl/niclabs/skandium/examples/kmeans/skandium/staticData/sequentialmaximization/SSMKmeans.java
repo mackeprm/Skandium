@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 public class SSMKmeans extends AbstractKmeans {
-    public SSMKmeans(String name, String[] args) {
-        super(name, args);
+    public SSMKmeans(String[] args) {
+        super("Kmeans (native, static, sequential maximization)", args);
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractKmeans kmeans = new SSMKmeans("Kmeans (native, static, sequential maximization)", args);
+        AbstractKmeans kmeans = new SSMKmeans(args);
         System.out.println(kmeans.toString());
         kmeans.run();
     }

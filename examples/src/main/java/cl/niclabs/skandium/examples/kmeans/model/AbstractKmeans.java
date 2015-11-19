@@ -17,7 +17,7 @@ public abstract class AbstractKmeans {
             numberOfValues = Integer.parseInt(args[1]);
             numberOfClusterCenters = Integer.parseInt(args[2]);
             dimension = Integer.parseInt(args[3]);
-            numberOfIterations = Integer.parseInt(args[4]);
+            //numberOfIterations = Integer.parseInt(args[4]);
         }
     }
 

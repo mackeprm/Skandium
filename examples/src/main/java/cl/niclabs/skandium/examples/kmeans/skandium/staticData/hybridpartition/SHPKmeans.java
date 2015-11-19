@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 public class SHPKmeans extends AbstractKmeans {
-    public SHPKmeans(String name, String[] args) {
-        super(name, args);
+    public SHPKmeans(String[] args) {
+        super("Kmeans (native, static, hybrid partition)", args);
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractKmeans kmeans = new SHPKmeans("Kmeans (native, static, hybrid partition)", args);
+        AbstractKmeans kmeans = new SHPKmeans(args);
         System.out.println(kmeans.toString());
         kmeans.run();
     }

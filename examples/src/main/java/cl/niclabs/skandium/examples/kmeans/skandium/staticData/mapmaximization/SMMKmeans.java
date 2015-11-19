@@ -20,12 +20,12 @@ import java.util.concurrent.Future;
 
 public class SMMKmeans extends AbstractKmeans {
 
-    public SMMKmeans(String name, String[] args) {
-        super(name, args);
+    public SMMKmeans(String[] args) {
+        super("Kmeans (native, static, map maximization)", args);
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractKmeans kmeans = new SMMKmeans("Kmeans (native, static, map maximization)", args);
+        AbstractKmeans kmeans = new SMMKmeans(args);
         System.out.println(kmeans.toString());
         kmeans.run();
     }
