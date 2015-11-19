@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans.simulated;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData.simulated;
 
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.muscles.Split;

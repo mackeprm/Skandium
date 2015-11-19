@@ -1,10 +1,11 @@
-package cl.niclabs.skandium.examples.kmeans.skandium.mapmaximization;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData.mapmaximization;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
-import cl.niclabs.skandium.examples.kmeans.skandium.*;
+import cl.niclabs.skandium.examples.kmeans.skandium.GlobalIterationsConvergenceCriterion;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.*;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
 import cl.niclabs.skandium.skeletons.MMKmeans;

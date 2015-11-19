@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans.simulated;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData.simulated;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;

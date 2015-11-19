@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans.skandium.mapmaximization;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData.mapmaximization;
 
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 

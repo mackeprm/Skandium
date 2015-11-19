@@ -1,7 +1,7 @@
-package cl.niclabs.skandium.examples.kmeans.skandium.mapmaximization;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData.mapmaximization;
 
 import cl.niclabs.skandium.examples.kmeans.model.Point;
-import cl.niclabs.skandium.examples.kmeans.skandium.ClusteredModel;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.ClusteredModel;
 import cl.niclabs.skandium.muscles.Split;
 
 import java.util.List;

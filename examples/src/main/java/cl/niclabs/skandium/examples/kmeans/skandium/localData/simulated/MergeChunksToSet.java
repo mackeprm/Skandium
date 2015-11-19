@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans.simulated;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData.simulated;
 
 import cl.niclabs.skandium.examples.kmeans.model.ClusteredPoint;
 import cl.niclabs.skandium.muscles.Merge;

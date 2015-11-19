@@ -3,7 +3,7 @@ package cl.niclabs.skandium.examples.kmeans.model;
 public abstract class AbstractKmeans {
     public String name;
     public int numberOfThreads = Runtime.getRuntime().availableProcessors();
-    public int numberOfClusterCenters = 2;
+    public int numberOfClusterCenters = 3;
     public int numberOfIterations = 10;
     public int dimension = 3;
     public int numberOfValues = 50_000;

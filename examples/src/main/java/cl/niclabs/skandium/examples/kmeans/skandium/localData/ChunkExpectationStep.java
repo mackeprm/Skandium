@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans.skandium;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData;
 
 import cl.niclabs.skandium.examples.kmeans.model.ClusteredPoint;
 import cl.niclabs.skandium.examples.kmeans.model.ExpectationSteps;

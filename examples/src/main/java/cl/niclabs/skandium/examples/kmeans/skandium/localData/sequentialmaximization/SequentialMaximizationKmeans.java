@@ -1,10 +1,14 @@
-package cl.niclabs.skandium.examples.kmeans.skandium.sequentialmaximization;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData.sequentialmaximization;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
-import cl.niclabs.skandium.examples.kmeans.skandium.*;
+import cl.niclabs.skandium.examples.kmeans.skandium.GlobalIterationsConvergenceCriterion;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.ChunkExpectationStep;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.MergeChunksToClusteredModel;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.Model;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.SplitModelInChunks;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
 import cl.niclabs.skandium.skeletons.SMKmeans;

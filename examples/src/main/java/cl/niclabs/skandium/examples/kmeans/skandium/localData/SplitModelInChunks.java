@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans.skandium;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData;
 
 import cl.niclabs.skandium.muscles.Split;
 
