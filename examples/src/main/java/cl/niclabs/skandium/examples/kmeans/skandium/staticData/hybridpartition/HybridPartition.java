@@ -17,21 +17,32 @@ public class HybridPartition implements Partition<Range, List<Point>> {
         this.data = data;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Point>[] partition(Range[] param) throws Exception {
+        return split(merge(param));
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Point>[] split(Range param) {
         final List<Point>[] result;
         result = (ArrayList<Point>[]) new ArrayList<?>[numberOfClusterCenters];
-        for (Range subrange : param) {
-            for (int i = 0; i < subrange.clusterIndices.size(); i++) {
-                final Integer currentIndex = subrange.clusterIndices.get(i);
-                if (result[currentIndex] == null) {
-                    result[currentIndex] = new ArrayList<>();
-                }
-                result[currentIndex].add(data.get(i));
+        for (int i = 0; i < param.clusterIndices.size(); i++) {
+            final Integer currentIndex = param.clusterIndices.get(i);
+            if (result[currentIndex] == null) {
+                result[currentIndex] = new ArrayList<>();
             }
+            result[currentIndex].add(data.get(i));
         }
-
         return result;
+    }
+
+    public Range merge(Range[] param) throws Exception {
+        final List<Integer> clusterIndices = new ArrayList<>(data.size());
+        for (Range subrange : param) {
+            clusterIndices.addAll(subrange.clusterIndices);
+        }
+        final Range range = new Range(0, data.size());
+        range.clusterIndices = clusterIndices;
+        return range;
     }
 }
