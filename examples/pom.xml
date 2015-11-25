@@ -40,7 +40,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>cl.niclabs.skandium.examples.Main</mainClass>
+                            <mainClass>cl.niclabs.skandium.examples.kmeans.Kmeans</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

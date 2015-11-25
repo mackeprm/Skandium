@@ -14,7 +14,7 @@ public class SqliteRunRepository implements AutoCloseable {
     }
 
     public static void main(String args[]) throws Exception {
-        if ("initalize".equals(args[0])) {
+        if ("initialize".equals(args[0])) {
             try (SqliteRunRepository runRepository = new SqliteRunRepository("output.db")) {
                 runRepository.initializeDatabase();
             }
