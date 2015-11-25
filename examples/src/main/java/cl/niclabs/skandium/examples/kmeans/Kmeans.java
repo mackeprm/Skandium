@@ -5,6 +5,7 @@ import cl.niclabs.skandium.examples.kmeans.skandium.staticData.hybridpartition.S
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.SDMMKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequential.SDSeqKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequentialmaximization.SDSMKmeans;
+import cl.niclabs.skandium.examples.kmeans.skandium.staticData.simulated.SDSimKmeans;
 
 public class Kmeans {
 
@@ -24,6 +25,8 @@ public class Kmeans {
                 kmeans = new SDHPKmeans(args);
             } else if (flavor.equalsIgnoreCase("sd-seq")) {
                 kmeans = new SDSeqKmeans(args);
+            } else if (flavor.equalsIgnoreCase("sd-sim")) {
+                kmeans = new SDSimKmeans(args);
             } else {
                 System.out.println(USAGE);
                 return;
