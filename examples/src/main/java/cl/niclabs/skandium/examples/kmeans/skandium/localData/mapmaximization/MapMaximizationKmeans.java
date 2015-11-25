@@ -12,17 +12,25 @@ import cl.niclabs.skandium.skeletons.MMKmeans;
 import cl.niclabs.skandium.skeletons.Map;
 import cl.niclabs.skandium.skeletons.Skeleton;
 
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
 public class MapMaximizationKmeans extends AbstractKmeans {
 
-    public MapMaximizationKmeans(String name, String[] args) {
-        super(name, args);
+    public MapMaximizationKmeans(String[] args) throws UnknownHostException {
+        super(args);
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractKmeans kmeans = new MapMaximizationKmeans("native K-Means (map maximization)", args);
+        String[] defaultArgs;
+        if (args == null || args.length == 0) {
+            defaultArgs = new String[1];
+            defaultArgs[0] = "dd-mm";
+        } else {
+            defaultArgs = args;
+        }
+        AbstractKmeans kmeans = new MapMaximizationKmeans(defaultArgs);
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -63,7 +71,9 @@ public class MapMaximizationKmeans extends AbstractKmeans {
 
             Model result = future.get();
 
-            System.out.println("time:" + (System.currentTimeMillis() - init) + "[ms]");
+            long measure = System.currentTimeMillis() - init;
+            System.out.println("time:" + measure + "[ms]");
+            storeMeasure(measure);
             int index = 0;
             for (Point clusterCenter : result.getClusterCenters()) {
                 System.out.println(index++ + " : " + clusterCenter);

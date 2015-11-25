@@ -11,17 +11,25 @@ import cl.niclabs.skandium.skeletons.Map;
 import cl.niclabs.skandium.skeletons.Pipe;
 import cl.niclabs.skandium.skeletons.Skeleton;
 
+import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Future;
 
 public class SimulatedKMeans extends AbstractKmeans {
-    public SimulatedKMeans(String name, String[] args) {
-        super(name, args);
+    public SimulatedKMeans(String[] args) throws UnknownHostException {
+        super(args);
     }
 
-    public static void main(String args[]) throws Exception {
-        SimulatedKMeans kmeans = new SimulatedKMeans("Simulated K-Means", args);
+    public static void main(String[] args) throws Exception {
+        String[] defaultArgs;
+        if (args == null || args.length == 0) {
+            defaultArgs = new String[1];
+            defaultArgs[0] = "dd-sim";
+        } else {
+            defaultArgs = args;
+        }
+        AbstractKmeans kmeans = new SimulatedKMeans(defaultArgs);
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -53,7 +61,9 @@ public class SimulatedKMeans extends AbstractKmeans {
                 clusterCenters = newClusterCenters.get();
             }
 
-            System.out.println("time:" + (System.currentTimeMillis() - init) + "[ms]");
+            long measure = System.currentTimeMillis() - init;
+            System.out.println("time:" + measure + "[ms]");
+            storeMeasure(measure);
             int index = 0;
             for (Point clusterCenter : clusterCenters) {
                 System.out.println(index++ + " : " + clusterCenter);

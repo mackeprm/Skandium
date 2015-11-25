@@ -14,16 +14,24 @@ import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
 import cl.niclabs.skandium.skeletons.HPKmeans;
 
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
 public class SHPKmeans extends AbstractKmeans {
-    public SHPKmeans(String[] args) {
-        super("Kmeans (native, static, hybrid partition)", args);
+    public SHPKmeans(String[] args) throws UnknownHostException {
+        super(args);
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractKmeans kmeans = new SHPKmeans(args);
+        String[] defaultArgs;
+        if (args == null || args.length == 0) {
+            defaultArgs = new String[1];
+            defaultArgs[0] = "sd-hp";
+        } else {
+            defaultArgs = args;
+        }
+        AbstractKmeans kmeans = new SHPKmeans(defaultArgs);
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -52,7 +60,9 @@ public class SHPKmeans extends AbstractKmeans {
 
             Range result = future.get();
 
-            System.out.println("time:" + (System.currentTimeMillis() - init) + "[ms]");
+            long measure = System.currentTimeMillis() - init;
+            System.out.println("time:" + measure + "[ms]");
+            storeMeasure(measure);
             int index = 0;
             for (Point clusterCenter : result.clusters) {
                 System.out.println(index++ + " : " + clusterCenter);

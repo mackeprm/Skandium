@@ -7,22 +7,26 @@ import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequentialmaximiz
 
 public class Kmeans {
 
+    public static final String USAGE = "Usage: <flavour> <n> <k> <d> <i> <threads> <partitions> <taskset>";
+
     public static void main(String[] args) throws Exception {
-        //<flavor> <threads> <n> <k> <d>
-        final String flavor = args[0];
-        final String[] sub = {args[1], args[2], args[3], args[4]};
-        final AbstractKmeans kmeans;
-        if (flavor.equalsIgnoreCase("sm")) {
-            kmeans = new SSMKmeans(sub);
-        } else if (flavor.equalsIgnoreCase("mm")) {
-            kmeans = new SMMKmeans(sub);
-        } else if (flavor.equalsIgnoreCase("hp")) {
-            kmeans = new SHPKmeans(sub);
+        if (args.length != 8) {
+            System.out.println("Usage: <flavour> <n> <k> <d> <i> <threads> <partitions> <taskset>");
         } else {
-            System.out.println("Usage: kmeans <flavor> <threads> <n> <k> <d>");
-            return;
+            final String flavor = args[0];
+            final AbstractKmeans kmeans;
+            if (flavor.equalsIgnoreCase("sd-sm")) {
+                kmeans = new SSMKmeans(args);
+            } else if (flavor.equalsIgnoreCase("sd-mm")) {
+                kmeans = new SMMKmeans(args);
+            } else if (flavor.equalsIgnoreCase("sd-hp")) {
+                kmeans = new SHPKmeans(args);
+            } else {
+                System.out.println(USAGE);
+                return;
+            }
+            System.out.println(kmeans.toString());
+            kmeans.run();
         }
-        System.out.println(kmeans.toString());
-        kmeans.run();
     }
 }

@@ -15,17 +15,25 @@ import cl.niclabs.skandium.skeletons.MMKmeans;
 import cl.niclabs.skandium.skeletons.Map;
 import cl.niclabs.skandium.skeletons.Skeleton;
 
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
 public class SMMKmeans extends AbstractKmeans {
 
-    public SMMKmeans(String[] args) {
-        super("Kmeans (native, static, map maximization)", args);
+    public SMMKmeans(String[] args) throws UnknownHostException {
+        super(args);
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractKmeans kmeans = new SMMKmeans(args);
+        String[] defaultArgs;
+        if (args == null || args.length == 0) {
+            defaultArgs = new String[1];
+            defaultArgs[0] = "sd-mm";
+        } else {
+            defaultArgs = args;
+        }
+        AbstractKmeans kmeans = new SMMKmeans(defaultArgs);
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -65,7 +73,9 @@ public class SMMKmeans extends AbstractKmeans {
 
             Range result = future.get();
 
-            System.out.println("time:" + (System.currentTimeMillis() - init) + "[ms]");
+            long measure = System.currentTimeMillis() - init;
+            System.out.println("time:" + measure + "[ms]");
+            storeMeasure(measure);
             int index = 0;
             for (Point clusterCenter : result.clusters) {
                 System.out.println(index++ + " : " + clusterCenter);
