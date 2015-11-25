@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SequentialKmeans extends AbstractKmeans {
+public class SDSeqKmeans extends AbstractKmeans {
 
-    public SequentialKmeans(String[] args) throws UnknownHostException {
+    public SDSeqKmeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
@@ -23,7 +23,7 @@ public class SequentialKmeans extends AbstractKmeans {
         } else {
             defaultArgs = args;
         }
-        AbstractKmeans kmeans = new SequentialKmeans(defaultArgs);
+        AbstractKmeans kmeans = new SDSeqKmeans(defaultArgs);
         System.out.println(kmeans.toString());
         kmeans.run();
     }

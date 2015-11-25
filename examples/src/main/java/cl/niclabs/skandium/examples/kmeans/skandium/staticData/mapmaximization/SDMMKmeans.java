@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequentialmaximization;
+package cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
@@ -11,14 +11,17 @@ import cl.niclabs.skandium.examples.kmeans.skandium.staticData.RangeExpectationS
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.SplitInSubranges;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
-import cl.niclabs.skandium.skeletons.SMKmeans;
+import cl.niclabs.skandium.skeletons.MMKmeans;
+import cl.niclabs.skandium.skeletons.Map;
+import cl.niclabs.skandium.skeletons.Skeleton;
 
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
-public class SSMKmeans extends AbstractKmeans {
-    public SSMKmeans(String[] args) throws UnknownHostException {
+public class SDMMKmeans extends AbstractKmeans {
+
+    public SDMMKmeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
@@ -26,11 +29,11 @@ public class SSMKmeans extends AbstractKmeans {
         String[] defaultArgs;
         if (args == null || args.length == 0) {
             defaultArgs = new String[1];
-            defaultArgs[0] = "sd-sm";
+            defaultArgs[0] = "sd-mm";
         } else {
             defaultArgs = args;
         }
-        AbstractKmeans kmeans = new SSMKmeans(defaultArgs);
+        AbstractKmeans kmeans = new SDMMKmeans(defaultArgs);
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -43,13 +46,26 @@ public class SSMKmeans extends AbstractKmeans {
             final List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
             final Range startRange = new Range(0, data.size(), clusterCenters);
 
-            SMKmeans<Range> kmeans = new SMKmeans<>(
+            //1. Expectation Step
+            Skeleton<Range, Range> expectationSkeleton = new Map<>(
                     new SplitInSubranges(numberOfThreads),
                     new RangeExpectationStep(data),
-                    new MergeRanges(data.size()),
-                    new SequentialRangeMaximizationStep(numberOfClusterCenters, data),
-                    new GlobalIterationsConvergenceCriterion<>(numberOfIterations)
+                    new MergeRanges(data.size())
             );
+
+            //2. Maximization Step
+            Skeleton<Range, Range> maximizationSkeleton = new Map<>(
+                    new Partition(numberOfClusterCenters, data),
+                    new MaximizationStep(),
+                    new MaximizationMerge(data.size())
+            );
+
+            MMKmeans<Range> kmeans = new MMKmeans<>(
+                    new GlobalIterationsConvergenceCriterion<>(numberOfIterations),
+                    expectationSkeleton,
+                    maximizationSkeleton
+            );
+
 
             long init = System.currentTimeMillis();
             Stream<Range, Range> stream = skandium.newStream(kmeans);

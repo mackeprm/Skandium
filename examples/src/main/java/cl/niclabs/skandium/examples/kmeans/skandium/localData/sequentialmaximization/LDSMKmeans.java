@@ -1,24 +1,26 @@
-package cl.niclabs.skandium.examples.kmeans.skandium.localData.mapmaximization;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData.sequentialmaximization;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.examples.kmeans.skandium.GlobalIterationsConvergenceCriterion;
-import cl.niclabs.skandium.examples.kmeans.skandium.localData.*;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.ChunkExpectationStep;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.MergeChunksToClusteredModel;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.Model;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.SplitModelInChunks;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
-import cl.niclabs.skandium.skeletons.MMKmeans;
-import cl.niclabs.skandium.skeletons.Map;
-import cl.niclabs.skandium.skeletons.Skeleton;
+import cl.niclabs.skandium.skeletons.SMKmeans;
 
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
-public class MapMaximizationKmeans extends AbstractKmeans {
+public class LDSMKmeans extends AbstractKmeans {
 
-    public MapMaximizationKmeans(String[] args) throws UnknownHostException {
+
+    public LDSMKmeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
@@ -26,11 +28,11 @@ public class MapMaximizationKmeans extends AbstractKmeans {
         String[] defaultArgs;
         if (args == null || args.length == 0) {
             defaultArgs = new String[1];
-            defaultArgs[0] = "dd-mm";
+            defaultArgs[0] = "ld-sm";
         } else {
             defaultArgs = args;
         }
-        AbstractKmeans kmeans = new MapMaximizationKmeans(defaultArgs);
+        AbstractKmeans kmeans = new LDSMKmeans(defaultArgs);
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -39,24 +41,12 @@ public class MapMaximizationKmeans extends AbstractKmeans {
     public void run() throws Exception {
         try (final Skandium skandium = new Skandium(numberOfThreads)) {
 
-            //1. Expectation Step
-            Skeleton<Model, ClusteredModel> expectationSkeleton = new Map<>(
+            SMKmeans<Model> kmeans = new SMKmeans<>(
                     new SplitModelInChunks(numberOfThreads),
                     new ChunkExpectationStep(),
-                    new MergeChunksToClusteredModel()
-            );
-
-            //2. Maximization Step
-            Skeleton<ClusteredModel, Model> maximizationSkeleton = new Map<>(
-                    new PartitionInCluster(),
-                    new CalculateMean(),
-                    new MergeToModel()
-            );
-
-            MMKmeans<Model> kmeans = new MMKmeans<>(
-                    new GlobalIterationsConvergenceCriterion<>(numberOfIterations),
-                    expectationSkeleton,
-                    maximizationSkeleton
+                    new MergeChunksToClusteredModel(),
+                    new CalculateNewModelFromClusters(),
+                    new GlobalIterationsConvergenceCriterion<>(numberOfIterations)
             );
 
             final RandomDataSetGenerator randomDataSetGenerator = new RandomDataSetGenerator(dimension, seed);
@@ -80,4 +70,5 @@ public class MapMaximizationKmeans extends AbstractKmeans {
             }
         }
     }
+
 }

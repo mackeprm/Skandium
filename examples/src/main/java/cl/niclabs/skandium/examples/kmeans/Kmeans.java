@@ -1,10 +1,10 @@
 package cl.niclabs.skandium.examples.kmeans;
 
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
-import cl.niclabs.skandium.examples.kmeans.skandium.staticData.hybridpartition.SHPKmeans;
-import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.SMMKmeans;
-import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequential.SequentialKmeans;
-import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequentialmaximization.SSMKmeans;
+import cl.niclabs.skandium.examples.kmeans.skandium.staticData.hybridpartition.SDHPKmeans;
+import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.SDMMKmeans;
+import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequential.SDSeqKmeans;
+import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequentialmaximization.SDSMKmeans;
 
 public class Kmeans {
 
@@ -17,13 +17,13 @@ public class Kmeans {
             final String flavor = args[0];
             final AbstractKmeans kmeans;
             if (flavor.equalsIgnoreCase("sd-sm")) {
-                kmeans = new SSMKmeans(args);
+                kmeans = new SDSMKmeans(args);
             } else if (flavor.equalsIgnoreCase("sd-mm")) {
-                kmeans = new SMMKmeans(args);
+                kmeans = new SDMMKmeans(args);
             } else if (flavor.equalsIgnoreCase("sd-hp")) {
-                kmeans = new SHPKmeans(args);
+                kmeans = new SDHPKmeans(args);
             } else if (flavor.equalsIgnoreCase("sd-seq")) {
-                kmeans = new SequentialKmeans(args);
+                kmeans = new SDSeqKmeans(args);
             } else {
                 System.out.println(USAGE);
                 return;

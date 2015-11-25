@@ -1,26 +1,24 @@
-package cl.niclabs.skandium.examples.kmeans.skandium.localData.sequentialmaximization;
+package cl.niclabs.skandium.examples.kmeans.skandium.localData.mapmaximization;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.examples.kmeans.skandium.GlobalIterationsConvergenceCriterion;
-import cl.niclabs.skandium.examples.kmeans.skandium.localData.ChunkExpectationStep;
-import cl.niclabs.skandium.examples.kmeans.skandium.localData.MergeChunksToClusteredModel;
-import cl.niclabs.skandium.examples.kmeans.skandium.localData.Model;
-import cl.niclabs.skandium.examples.kmeans.skandium.localData.SplitModelInChunks;
+import cl.niclabs.skandium.examples.kmeans.skandium.localData.*;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
-import cl.niclabs.skandium.skeletons.SMKmeans;
+import cl.niclabs.skandium.skeletons.MMKmeans;
+import cl.niclabs.skandium.skeletons.Map;
+import cl.niclabs.skandium.skeletons.Skeleton;
 
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
-public class SequentialMaximizationKmeans extends AbstractKmeans {
+public class LDMMKmeans extends AbstractKmeans {
 
-
-    public SequentialMaximizationKmeans(String[] args) throws UnknownHostException {
+    public LDMMKmeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
@@ -28,11 +26,11 @@ public class SequentialMaximizationKmeans extends AbstractKmeans {
         String[] defaultArgs;
         if (args == null || args.length == 0) {
             defaultArgs = new String[1];
-            defaultArgs[0] = "dd-sm";
+            defaultArgs[0] = "ld-mm";
         } else {
             defaultArgs = args;
         }
-        AbstractKmeans kmeans = new SequentialMaximizationKmeans(defaultArgs);
+        AbstractKmeans kmeans = new LDMMKmeans(defaultArgs);
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -41,12 +39,24 @@ public class SequentialMaximizationKmeans extends AbstractKmeans {
     public void run() throws Exception {
         try (final Skandium skandium = new Skandium(numberOfThreads)) {
 
-            SMKmeans<Model> kmeans = new SMKmeans<>(
+            //1. Expectation Step
+            Skeleton<Model, ClusteredModel> expectationSkeleton = new Map<>(
                     new SplitModelInChunks(numberOfThreads),
                     new ChunkExpectationStep(),
-                    new MergeChunksToClusteredModel(),
-                    new CalculateNewModelFromClusters(),
-                    new GlobalIterationsConvergenceCriterion<>(numberOfIterations)
+                    new MergeChunksToClusteredModel()
+            );
+
+            //2. Maximization Step
+            Skeleton<ClusteredModel, Model> maximizationSkeleton = new Map<>(
+                    new PartitionInCluster(),
+                    new CalculateMean(),
+                    new MergeToModel()
+            );
+
+            MMKmeans<Model> kmeans = new MMKmeans<>(
+                    new GlobalIterationsConvergenceCriterion<>(numberOfIterations),
+                    expectationSkeleton,
+                    maximizationSkeleton
             );
 
             final RandomDataSetGenerator randomDataSetGenerator = new RandomDataSetGenerator(dimension, seed);
@@ -70,5 +80,4 @@ public class SequentialMaximizationKmeans extends AbstractKmeans {
             }
         }
     }
-
 }

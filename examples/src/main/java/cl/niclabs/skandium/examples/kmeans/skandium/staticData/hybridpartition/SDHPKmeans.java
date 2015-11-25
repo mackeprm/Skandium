@@ -1,27 +1,25 @@
-package cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization;
+package cl.niclabs.skandium.examples.kmeans.skandium.staticData.hybridpartition;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.examples.kmeans.skandium.GlobalIterationsConvergenceCriterion;
-import cl.niclabs.skandium.examples.kmeans.skandium.staticData.MergeRanges;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.Range;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.RangeExpectationStep;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.SplitInSubranges;
+import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.MaximizationMerge;
+import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.MaximizationStep;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
-import cl.niclabs.skandium.skeletons.MMKmeans;
-import cl.niclabs.skandium.skeletons.Map;
-import cl.niclabs.skandium.skeletons.Skeleton;
+import cl.niclabs.skandium.skeletons.HPKmeans;
 
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
-public class SMMKmeans extends AbstractKmeans {
-
-    public SMMKmeans(String[] args) throws UnknownHostException {
+public class SDHPKmeans extends AbstractKmeans {
+    public SDHPKmeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
@@ -29,11 +27,11 @@ public class SMMKmeans extends AbstractKmeans {
         String[] defaultArgs;
         if (args == null || args.length == 0) {
             defaultArgs = new String[1];
-            defaultArgs[0] = "sd-mm";
+            defaultArgs[0] = "sd-hp";
         } else {
             defaultArgs = args;
         }
-        AbstractKmeans kmeans = new SMMKmeans(defaultArgs);
+        AbstractKmeans kmeans = new SDHPKmeans(defaultArgs);
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -46,24 +44,13 @@ public class SMMKmeans extends AbstractKmeans {
             final List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
             final Range startRange = new Range(0, data.size(), clusterCenters);
 
-            //1. Expectation Step
-            Skeleton<Range, Range> expectationSkeleton = new Map<>(
+            HPKmeans<Range> kmeans = new HPKmeans<>(
+                    new GlobalIterationsConvergenceCriterion<>(numberOfIterations),
                     new SplitInSubranges(numberOfThreads),
                     new RangeExpectationStep(data),
-                    new MergeRanges(data.size())
-            );
-
-            //2. Maximization Step
-            Skeleton<Range, Range> maximizationSkeleton = new Map<>(
-                    new Partition(numberOfClusterCenters, data),
+                    new HybridPartition(numberOfClusterCenters, data),
                     new MaximizationStep(),
                     new MaximizationMerge(data.size())
-            );
-
-            MMKmeans<Range> kmeans = new MMKmeans<>(
-                    new GlobalIterationsConvergenceCriterion<>(numberOfIterations),
-                    expectationSkeleton,
-                    maximizationSkeleton
             );
 
 

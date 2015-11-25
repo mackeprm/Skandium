@@ -16,8 +16,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Future;
 
-public class SimulatedKMeans extends AbstractKmeans {
-    public SimulatedKMeans(String[] args) throws UnknownHostException {
+public class LDSimKmeans extends AbstractKmeans {
+    public LDSimKmeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
@@ -25,11 +25,11 @@ public class SimulatedKMeans extends AbstractKmeans {
         String[] defaultArgs;
         if (args == null || args.length == 0) {
             defaultArgs = new String[1];
-            defaultArgs[0] = "dd-sim";
+            defaultArgs[0] = "ld-sim";
         } else {
             defaultArgs = args;
         }
-        AbstractKmeans kmeans = new SimulatedKMeans(defaultArgs);
+        AbstractKmeans kmeans = new LDSimKmeans(defaultArgs);
         System.out.println(kmeans.toString());
         kmeans.run();
     }
