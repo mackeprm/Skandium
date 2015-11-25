@@ -28,7 +28,11 @@ public class RandomDataSetGenerator {
         return result;
     }
 
-    private List<Double> getRandomDoubles() {
+    protected int getDimension() {
+        return dimension;
+    }
+
+    protected List<Double> getRandomDoubles() {
         final List<Double> result = new ArrayList<>(dimension);
         for (int i = 0; i < dimension; i++) {
             result.add(random.nextDouble());
