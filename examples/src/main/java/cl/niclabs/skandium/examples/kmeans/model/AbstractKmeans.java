@@ -58,12 +58,17 @@ public abstract class AbstractKmeans {
 
     @Override
     public String toString() {
-        return system + ":(" + flavour + "):{" +
-                "Threads=" + numberOfThreads +
-                ", n=" + numberOfValues +
-                ", k=" + numberOfClusterCenters +
-                ", d=" + dimension +
-                ", i=" + numberOfIterations +
+        return "Kmeans{" +
+                "flavour='" + flavour + '\'' +
+                ", system='" + system + '\'' +
+                ", taskset='" + taskset + '\'' +
+                ", numberOfThreads=" + numberOfThreads +
+                ", partitions=" + partitions +
+                ", numberOfClusterCenters=" + numberOfClusterCenters +
+                ", numberOfIterations=" + numberOfIterations +
+                ", dimension=" + dimension +
+                ", numberOfValues=" + numberOfValues +
+                ", seed=" + seed +
                 '}';
     }
 }
