@@ -11,8 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractKmeans {
-    public static final String OUTPUT_DB = "output-partitiontest.db";
-    public static boolean WRITE_OUTPUT = false;
+    public static final String OUTPUT_DB = "output.db";
+    public static boolean WRITE_OUTPUT = true;
     public String flavour;
     public String system;
     public String taskset;
