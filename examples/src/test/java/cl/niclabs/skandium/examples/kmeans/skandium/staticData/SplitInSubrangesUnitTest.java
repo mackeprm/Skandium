@@ -23,11 +23,10 @@ public class SplitInSubrangesUnitTest {
     public void testSplitWithRemainder() throws Exception {
         final SplitInSubranges split = new SplitInSubranges(3);
         final Range[] results = split.split(new Range(0, 10));
-        assertThat(results).hasSize(4);
-        assertThat(results[0]).isEqualToComparingOnlyGivenFields(new Range(0, 3), "left", "right");
-        assertThat(results[1]).isEqualToComparingOnlyGivenFields(new Range(3, 6), "left", "right");
-        assertThat(results[2]).isEqualToComparingOnlyGivenFields(new Range(6, 9), "left", "right");
-        assertThat(results[3]).isEqualToComparingOnlyGivenFields(new Range(9, 10), "left", "right");
+        assertThat(results).hasSize(3);
+        assertThat(results[0]).isEqualToComparingOnlyGivenFields(new Range(0, 4), "left", "right");
+        assertThat(results[1]).isEqualToComparingOnlyGivenFields(new Range(4, 8), "left", "right");
+        assertThat(results[2]).isEqualToComparingOnlyGivenFields(new Range(8, 10), "left", "right");
     }
 
     @Test

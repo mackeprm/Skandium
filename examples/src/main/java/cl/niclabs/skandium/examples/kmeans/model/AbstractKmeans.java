@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 
 public abstract class AbstractKmeans {
-    public static final String OUTPUT_DB = "output.db";
+    public static final String OUTPUT_DB = "output-partitiontest.db";
     public String flavour;
     public String system;
     public String taskset;
