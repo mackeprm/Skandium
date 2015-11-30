@@ -36,10 +36,12 @@ public class SDSMKmeans extends AbstractKmeans {
 
     @Override
     public void run() throws Exception {
+        long allInit = System.currentTimeMillis();
         try (final Skandium skandium = new Skandium(numberOfThreads)) {
             final List<Point> data = getDataFromFile();
             final List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
             final Range startRange = new Range(0, data.size(), clusterCenters);
+            System.out.println("init: " + (System.currentTimeMillis() - allInit) + "[ms]");
 
             SMKmeans<Range> kmeans = new SMKmeans<>(
                     new SplitInSubranges(numberOfThreads),
@@ -63,5 +65,6 @@ public class SDSMKmeans extends AbstractKmeans {
                 System.out.println(index++ + " : " + clusterCenter);
             }
         }
+        System.out.println("all:" + (System.currentTimeMillis() - allInit) + "[ms]");
     }
 }
