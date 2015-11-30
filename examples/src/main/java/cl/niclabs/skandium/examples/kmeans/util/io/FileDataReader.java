@@ -2,56 +2,43 @@ package cl.niclabs.skandium.examples.kmeans.util.io;
 
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FileDataReader implements DataReader {
-    /**
-     * Convert a Closeable to a Runnable by converting checked IOException
-     * to UncheckedIOException
-     */
-    private static Runnable asUncheckedRunnable(Closeable c) {
-        return () -> {
-            try {
-                c.close();
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
-        };
-    }
 
     @Override
-    public List<Point> read(String sourceAddress) throws IOException {
-        final Stream<String> stream = readFromFile(sourceAddress);
-        return stream.map(Point::new).collect(Collectors.toList());
+    public List<Point> read(String sourceAddress, int d, int n) throws IOException {
+        final Path path = Paths.get(sourceAddress);
+        return read(path, d, n);
     }
 
-    private Stream<String> readFromFile(String filename) throws IOException {
-        Path path = Paths.get(filename);
-        InputStream in = Files.newInputStream(path, StandardOpenOption.READ);
-        InputStreamReader reader = new InputStreamReader(in);
-        return lines(new BufferedReader(reader));
-    }
-
-    private Stream<String> lines(BufferedReader br) {
-        try {
-            return br.lines().onClose(asUncheckedRunnable(br));
-        } catch (Error | RuntimeException e) {
-            try {
-                br.close();
-            } catch (IOException ex) {
-                try {
-                    e.addSuppressed(ex);
-                } catch (Throwable ignore) {
-                }
+    public List<Point> read(Path sourcePath, int d, int n) throws IOException {
+        final BufferedReader bufferedReader = readFromFile(sourcePath);
+        final List<Point> result = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            final String line = bufferedReader.readLine();
+            final String[] split = line.split(",");
+            final List<Double> values = new ArrayList<>(d);
+            for (int j = 0; j < d; j++) {
+                values.add(Double.valueOf(split[j]));
             }
-            throw e;
+            result.add(new Point(values));
         }
+        return result;
+    }
+
+    private BufferedReader readFromFile(Path sourcePath) throws IOException {
+        final InputStream in = Files.newInputStream(sourcePath, StandardOpenOption.READ);
+        final InputStreamReader reader = new InputStreamReader(in);
+        return new BufferedReader(reader);
     }
 }
