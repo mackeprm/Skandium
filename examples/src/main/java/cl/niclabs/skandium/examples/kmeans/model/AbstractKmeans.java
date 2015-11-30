@@ -1,14 +1,18 @@
 package cl.niclabs.skandium.examples.kmeans.model;
 
+import cl.niclabs.skandium.examples.kmeans.util.io.FileDataReader;
 import de.huberlin.mackeprm.skandium.statistics.Run;
 import de.huberlin.mackeprm.skandium.statistics.SqliteRunRepository;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.List;
 
 public abstract class AbstractKmeans {
     public static final String OUTPUT_DB = "output-partitiontest.db";
+    public static boolean WRITE_OUTPUT = false;
     public String flavour;
     public String system;
     public String taskset;
@@ -39,20 +43,29 @@ public abstract class AbstractKmeans {
 
     abstract public void run() throws Exception;
 
+    public List<Point> getDataFromFile() throws IOException {
+        FileDataReader reader = new FileDataReader();
+        return reader.read("/tmp/randomPoints-d3-n10000000.csv", dimension, numberOfValues);
+    }
+
     public void storeMeasure(long measure) throws Exception {
-        Run currentRun = new Run(measure,
-                this.numberOfValues,
-                this.numberOfClusterCenters,
-                this.dimension,
-                this.numberOfIterations,
-                this.partitions,
-                this.numberOfThreads,
-                this.flavour,
-                this.system,
-                this.taskset,
-                new Date().getTime());
-        try (SqliteRunRepository runRepository = new SqliteRunRepository(OUTPUT_DB)) {
-            runRepository.dump(currentRun);
+        if (WRITE_OUTPUT) {
+            Run currentRun = new Run(measure,
+                    this.numberOfValues,
+                    this.numberOfClusterCenters,
+                    this.dimension,
+                    this.numberOfIterations,
+                    this.partitions,
+                    this.numberOfThreads,
+                    this.flavour,
+                    this.system,
+                    this.taskset,
+                    new Date().getTime());
+            try (SqliteRunRepository runRepository = new SqliteRunRepository(OUTPUT_DB)) {
+                runRepository.dump(currentRun);
+            }
+        } else {
+            System.out.println("no measure stored");
         }
     }
 

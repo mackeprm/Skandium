@@ -12,7 +12,6 @@ import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.M
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.MaximizationStep;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.Partition;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
-import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
 import cl.niclabs.skandium.skeletons.Map;
 import cl.niclabs.skandium.skeletons.Pipe;
 import cl.niclabs.skandium.skeletons.Skeleton;
@@ -41,8 +40,7 @@ public class SDSimKmeans extends AbstractKmeans {
 
     @Override
     public void run() throws Exception {
-        final RandomDataSetGenerator randomDataSetGenerator = new RandomDataSetGenerator(dimension, seed);
-        final List<Point> data = randomDataSetGenerator.generatePoints(numberOfValues);
+        final List<Point> data = getDataFromFile();
         List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
         final Range startRange = new Range(0, data.size(), clusterCenters);
 

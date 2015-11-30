@@ -10,7 +10,6 @@ import cl.niclabs.skandium.examples.kmeans.skandium.staticData.Range;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.RangeExpectationStep;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.SplitInSubranges;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
-import cl.niclabs.skandium.examples.kmeans.util.RandomDataSetGenerator;
 import cl.niclabs.skandium.skeletons.MMKmeans;
 import cl.niclabs.skandium.skeletons.Map;
 import cl.niclabs.skandium.skeletons.Skeleton;
@@ -41,8 +40,7 @@ public class SDMMKmeans extends AbstractKmeans {
     @Override
     public void run() throws Exception {
         try (final Skandium skandium = new Skandium(numberOfThreads)) {
-            final RandomDataSetGenerator randomDataSetGenerator = new RandomDataSetGenerator(dimension, seed);
-            final List<Point> data = randomDataSetGenerator.generatePoints(numberOfValues);
+            final List<Point> data = getDataFromFile();
             final List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
             final Range startRange = new Range(0, data.size(), clusterCenters);
 
