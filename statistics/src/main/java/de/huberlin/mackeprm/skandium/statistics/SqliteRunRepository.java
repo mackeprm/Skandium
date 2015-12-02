@@ -3,6 +3,8 @@ package de.huberlin.mackeprm.skandium.statistics;
 import java.sql.*;
 
 public class SqliteRunRepository implements AutoCloseable {
+    private static final String OUTPUT_DB = "speedup-random.db";
+
     private final String filePath;
     private Connection dbConnection;
 
@@ -15,11 +17,11 @@ public class SqliteRunRepository implements AutoCloseable {
 
     public static void main(String args[]) throws Exception {
         if ("initialize".equals(args[0])) {
-            try (SqliteRunRepository runRepository = new SqliteRunRepository("output.db")) {
+            try (SqliteRunRepository runRepository = new SqliteRunRepository(OUTPUT_DB)) {
                 runRepository.initializeDatabase();
             }
-        } else if ("select".equals(args[0])) {
-            try (SqliteRunRepository runRepository = new SqliteRunRepository("output.db")) {
+        } else {
+            try (SqliteRunRepository runRepository = new SqliteRunRepository(OUTPUT_DB)) {
                 Statement select = runRepository.dbConnection.createStatement();
                 ResultSet resultSet = select.executeQuery("SELECT * FROM runs;");
                 while (resultSet.next()) {
@@ -28,8 +30,6 @@ public class SqliteRunRepository implements AutoCloseable {
                 }
                 resultSet.close();
             }
-        } else {
-            System.out.println("Usage: <command>");
         }
     }
 
