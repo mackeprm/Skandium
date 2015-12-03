@@ -30,6 +30,7 @@ public class MaximizationSteps {
 
     private static Double medianOf(List<Double> input) {
         int size = input.size();
+        //http://stackoverflow.com/questions/2114797/compute-median-of-values-stored-in-vector-c
 
     }*/
 

@@ -30,6 +30,7 @@ public class SDSeqKmeans extends AbstractKmeans {
 
     @Override
     public void run() throws Exception {
+        long totalInit = System.currentTimeMillis();
         final List<Point> data = getDataFromFile();
         List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
         java.util.Map<Integer, List<Point>> clustermap;
@@ -55,10 +56,10 @@ public class SDSeqKmeans extends AbstractKmeans {
 
         long measure = System.currentTimeMillis() - init;
         System.out.println("time:" + measure + "[ms]");
-        storeMeasure(measure);
         int index = 0;
         for (Point clusterCenter : clusterCenters) {
             System.out.println(index++ + " : " + clusterCenter);
         }
+        storeMeasure(measure, System.currentTimeMillis() - totalInit);
     }
 }

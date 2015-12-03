@@ -11,8 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractKmeans {
-    public static final String OUTPUT_DB = "speedup-random.db";
-    private static final String DATA_POINT_FILE = "/dev/shm/randomPoints-d3-n10000000.csv";
+    public static final String OUTPUT_DB = "sequential.db";
+    private static final String DATA_POINT_FILE = "/tmp/randomPoints-d3-n10000000.csv";
     public static boolean WRITE_OUTPUT = true;
     public String flavour;
     public String system;
@@ -49,9 +49,10 @@ public abstract class AbstractKmeans {
         return reader.read(DATA_POINT_FILE, dimension, numberOfValues);
     }
 
-    public void storeMeasure(long measure) throws Exception {
+    public void storeMeasure(long measure, long totalTime) throws Exception {
         if (WRITE_OUTPUT) {
             Run currentRun = new Run(measure,
+                    totalTime,
                     this.numberOfValues,
                     this.numberOfClusterCenters,
                     this.dimension,

@@ -3,14 +3,12 @@ package de.huberlin.mackeprm.skandium.statistics;
 import java.sql.*;
 
 public class SqliteRunRepository implements AutoCloseable {
-    private static final String OUTPUT_DB = "speedup-random.db";
+    private static final String OUTPUT_DB = "sequential.db";
 
-    private final String filePath;
     private Connection dbConnection;
 
     public SqliteRunRepository(String filePath) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
-        this.filePath = filePath;
         this.dbConnection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
         System.out.println("Opened database successfully");
     }
@@ -35,7 +33,7 @@ public class SqliteRunRepository implements AutoCloseable {
 
     public void initializeDatabase() throws SQLException {
         Statement createTable = dbConnection.createStatement();
-        String sql = ("CREATE TABLE runs (measure, n, k, d, i, partitions, cpus, flavour, system, taskset, timestamp);");
+        String sql = ("CREATE TABLE runs (measure, totalTime, n, k, d, i, partitions, cpus, flavour, system, taskset, timestamp);");
         createTable.executeUpdate(sql);
         createTable.close();
     }
@@ -43,19 +41,20 @@ public class SqliteRunRepository implements AutoCloseable {
     //Copy paste from http://javabeginners.de/Datenbanken/SQLite-Datenbank.php
     public synchronized void dump(Run run) throws SQLException {
         PreparedStatement insertRun = dbConnection
-                .prepareStatement("INSERT INTO runs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                .prepareStatement("INSERT INTO runs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
         insertRun.setLong(1, run.getMeasure());
-        insertRun.setInt(2, run.getN());
-        insertRun.setInt(3, run.getK());
-        insertRun.setInt(4, run.getD());
-        insertRun.setInt(5, run.getI());
-        insertRun.setInt(6, run.getPartitions());
-        insertRun.setInt(7, run.getCpus());
-        insertRun.setString(8, run.getFlavour());
-        insertRun.setString(9, run.getSystem());
-        insertRun.setString(10, run.getTaskSet());
-        insertRun.setLong(11, run.getTimestamp());
+        insertRun.setLong(2, run.getTotalTime());
+        insertRun.setInt(3, run.getN());
+        insertRun.setInt(4, run.getK());
+        insertRun.setInt(5, run.getD());
+        insertRun.setInt(6, run.getI());
+        insertRun.setInt(7, run.getPartitions());
+        insertRun.setInt(8, run.getCpus());
+        insertRun.setString(9, run.getFlavour());
+        insertRun.setString(10, run.getSystem());
+        insertRun.setString(11, run.getTaskSet());
+        insertRun.setLong(12, run.getTimestamp());
         insertRun.addBatch();
         dbConnection.setAutoCommit(false);
         insertRun.executeBatch();

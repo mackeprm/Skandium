@@ -40,6 +40,7 @@ public class SDSimKmeans extends AbstractKmeans {
 
     @Override
     public void run() throws Exception {
+        long totalInit = System.currentTimeMillis();
         final List<Point> data = getDataFromFile();
         List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
         final Range startRange = new Range(0, data.size(), clusterCenters);
@@ -74,11 +75,11 @@ public class SDSimKmeans extends AbstractKmeans {
 
             long measure = System.currentTimeMillis() - init;
             System.out.println("time:" + measure + "[ms]");
-            storeMeasure(measure);
             int index = 0;
             for (Point clusterCenter : clusterCenters) {
                 System.out.println(index++ + " : " + clusterCenter);
             }
+            storeMeasure(measure, System.currentTimeMillis() - totalInit);
         }
 
     }

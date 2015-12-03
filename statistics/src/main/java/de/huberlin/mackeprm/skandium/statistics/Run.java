@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 public class Run {
     private long measure;
+    private long totalTime;
     private int n;
     private int k;
     private int d;
@@ -16,8 +17,9 @@ public class Run {
     private String taskSet;
     private long timestamp;
 
-    public Run(long measure, int n, int k, int d, int i, int partitions, int cpus, String flavour, String system, String taskset, long timestamp) {
+    public Run(long measure, long totalTime, int n, int k, int d, int i, int partitions, int cpus, String flavour, String system, String taskset, long timestamp) {
         this.measure = measure;
+        this.totalTime = totalTime;
         this.n = n;
         this.k = k;
         this.d = d;
@@ -32,6 +34,7 @@ public class Run {
 
     public Run(ResultSet resultSet) throws SQLException {
         this.measure = resultSet.getLong("measure");
+        this.totalTime = resultSet.getLong("totalTime");
         this.n = resultSet.getInt("n");
         this.k = resultSet.getInt("k");
         this.d = resultSet.getInt("d");
@@ -47,6 +50,10 @@ public class Run {
 
     public long getMeasure() {
         return measure;
+    }
+
+    public long getTotalTime() {
+        return totalTime;
     }
 
     public int getN() {
@@ -93,6 +100,7 @@ public class Run {
     public String toString() {
         return "Run{" +
                 "measure=" + measure +
+                ", totalTime=" + totalTime +
                 ", n=" + n +
                 ", k=" + k +
                 ", d=" + d +
