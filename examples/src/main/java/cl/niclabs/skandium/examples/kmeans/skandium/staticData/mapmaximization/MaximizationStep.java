@@ -10,7 +10,8 @@ public class MaximizationStep implements Execute<List<Point>, Point> {
     @Override
     public Point execute(List<Point> param) throws Exception {
         if (param == null || param.isEmpty()) {
-            throw new IllegalStateException("detected empty Cluster!");
+            System.err.println("empty cluster detected");
+            return null;
         } else {
             return MaximizationSteps.calculateMeanOf(param, param.get(0).getDimension());
         }
