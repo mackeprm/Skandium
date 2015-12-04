@@ -14,7 +14,7 @@ public class KMeansRunConfiguration {
     public boolean writeOutput;
 
     @Parameter(names = "-n")
-    public int numberOfValues = 600;
+    public int numberOfValues = 100;
 
     @Parameter(names = "-k")
     public int numberOfClusterCenters = 10;
@@ -26,7 +26,7 @@ public class KMeansRunConfiguration {
     public int numberOfIterations = 10;
 
     @Parameter(names = "-p")
-    public int numberOfThreads = Runtime.getRuntime().availableProcessors();
+    public int numberOfThreads = 2;
 
     @Parameter(names = "-t")
     public String taskset;

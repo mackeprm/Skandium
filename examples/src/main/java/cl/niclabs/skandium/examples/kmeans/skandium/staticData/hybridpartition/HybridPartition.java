@@ -26,14 +26,18 @@ public class HybridPartition implements Partition<Range, List<Point>> {
     public List<Point>[] split(Range param) {
         final List<Point>[] result;
         result = (ArrayList<Point>[]) new ArrayList<?>[numberOfClusterCenters];
+        init(result);
         for (int i = 0; i < param.clusterIndices.size(); i++) {
             final Integer currentIndex = param.clusterIndices.get(i);
-            if (result[currentIndex] == null) {
-                result[currentIndex] = new ArrayList<>();
-            }
             result[currentIndex].add(data.get(i));
         }
         return result;
+    }
+
+    private void init(List<Point>[] result) {
+        for (int i = 0; i < numberOfClusterCenters; i++) {
+            result[i] = new ArrayList<>();
+        }
     }
 
     public Range merge(Range[] param) throws Exception {
