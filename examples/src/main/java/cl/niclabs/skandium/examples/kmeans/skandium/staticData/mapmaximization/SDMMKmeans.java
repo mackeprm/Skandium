@@ -18,6 +18,8 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
+
 public class SDMMKmeans extends AbstractKmeans {
 
     public SDMMKmeans(String[] args) throws UnknownHostException {
@@ -25,14 +27,7 @@ public class SDMMKmeans extends AbstractKmeans {
     }
 
     public static void main(String[] args) throws Exception {
-        String[] defaultArgs;
-        if (args == null || args.length == 0) {
-            defaultArgs = new String[1];
-            defaultArgs[0] = "sd-mm";
-        } else {
-            defaultArgs = args;
-        }
-        AbstractKmeans kmeans = new SDMMKmeans(defaultArgs);
+        AbstractKmeans kmeans = new SDMMKmeans(getOrDefault(args, "sd-mm"));
         System.out.println(kmeans.toString());
         kmeans.run();
     }

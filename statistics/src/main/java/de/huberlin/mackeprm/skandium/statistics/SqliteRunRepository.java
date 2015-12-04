@@ -1,5 +1,7 @@
 package de.huberlin.mackeprm.skandium.statistics;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 
 public class SqliteRunRepository implements AutoCloseable {
@@ -9,6 +11,10 @@ public class SqliteRunRepository implements AutoCloseable {
 
     public SqliteRunRepository(String filePath) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
+        if(Files.notExists(Paths.get(filePath))) {
+            this.dbConnection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+            initializeDatabase();
+        }
         this.dbConnection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
         System.out.println("Opened database successfully");
     }

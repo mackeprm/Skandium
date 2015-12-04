@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
+
 public class SDSeqKmeans extends AbstractKmeans {
 
     public SDSeqKmeans(String[] args) throws UnknownHostException {
@@ -15,14 +17,7 @@ public class SDSeqKmeans extends AbstractKmeans {
     }
 
     public static void main(String[] args) throws Exception {
-        String[] defaultArgs;
-        if (args == null || args.length == 0) {
-            defaultArgs = new String[1];
-            defaultArgs[0] = "sd-seq";
-        } else {
-            defaultArgs = args;
-        }
-        AbstractKmeans kmeans = new SDSeqKmeans(defaultArgs);
+        AbstractKmeans kmeans = new SDSeqKmeans(getOrDefault(args, "sd-seq"));
         System.out.println(kmeans.toString());
         kmeans.run();
     }

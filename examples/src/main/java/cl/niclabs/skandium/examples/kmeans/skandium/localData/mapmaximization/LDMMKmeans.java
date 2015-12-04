@@ -16,6 +16,8 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
+
 public class LDMMKmeans extends AbstractKmeans {
 
     public LDMMKmeans(String[] args) throws UnknownHostException {
@@ -23,14 +25,7 @@ public class LDMMKmeans extends AbstractKmeans {
     }
 
     public static void main(String[] args) throws Exception {
-        String[] defaultArgs;
-        if (args == null || args.length == 0) {
-            defaultArgs = new String[1];
-            defaultArgs[0] = "ld-mm";
-        } else {
-            defaultArgs = args;
-        }
-        AbstractKmeans kmeans = new LDMMKmeans(defaultArgs);
+        AbstractKmeans kmeans = new LDMMKmeans(getOrDefault(args, "ld-mm"));
         System.out.println(kmeans.toString());
         kmeans.run();
     }

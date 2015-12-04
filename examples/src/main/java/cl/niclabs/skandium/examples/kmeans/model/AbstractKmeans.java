@@ -1,6 +1,8 @@
 package cl.niclabs.skandium.examples.kmeans.model;
 
+import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.util.io.FileDataReader;
+import com.beust.jcommander.JCommander;
 import de.huberlin.mackeprm.skandium.statistics.Run;
 import de.huberlin.mackeprm.skandium.statistics.SqliteRunRepository;
 
@@ -11,46 +13,47 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractKmeans {
-    public static final String OUTPUT_DB = "sequential.db";
-    private static final String DATA_POINT_FILE = "/tmp/randomPoints-d3-n10000000.csv";
-    public static boolean WRITE_OUTPUT = false;
+    public String outputDB;
+    public boolean writeOutput;
     public String flavour;
     public String system;
     public String taskset;
-
-    public int numberOfThreads = Runtime.getRuntime().availableProcessors();
-    public int partitions = Runtime.getRuntime().availableProcessors();
-    public int numberOfClusterCenters = 10;
-    public int numberOfIterations = 10;
-    public int dimension = 3;
-    public int numberOfValues = 600;
-    public long seed = 4711l;
+    public int numberOfThreads;
+    public int partitions;
+    public int numberOfClusterCenters;
+    public int numberOfIterations;
+    public int dimension;
+    public int numberOfValues;
+    public long seed;
+    private String inputFile;
 
 
     public AbstractKmeans(String[] args) throws UnknownHostException {
-        this.flavour = args[0];
+        KMeansRunConfiguration config = new KMeansRunConfiguration();
+        new JCommander(config, args);
+        this.flavour = config.flavour;
         this.system = InetAddress.getLocalHost().getHostName();
-        if (args.length > 1) {
-            //<flavour> <n> <k> <d> <i> <threads> <partitions> <taskset>
-            numberOfValues = Integer.parseInt(args[1]);
-            numberOfClusterCenters = Integer.parseInt(args[2]);
-            dimension = Integer.parseInt(args[3]);
-            numberOfIterations = Integer.parseInt(args[4]);
-            numberOfThreads = Integer.parseInt(args[5]);
-            partitions = Integer.parseInt(args[6]);
-            taskset = args[7];
-        }
+        this.numberOfValues = config.numberOfValues;
+        this.numberOfClusterCenters = config.numberOfClusterCenters;
+        this.dimension = config.dimension;
+        this.numberOfIterations = config.numberOfIterations;
+        this.numberOfThreads = config.numberOfThreads;
+        this.partitions = config.numberOfThreads;
+        this.taskset = config.taskset;
+        this.inputFile = config.inputFile;
+        this.outputDB = config.outputDB;
+        this.writeOutput = config.writeOutput;
     }
 
     abstract public void run() throws Exception;
 
     public List<Point> getDataFromFile() throws IOException {
         FileDataReader reader = new FileDataReader();
-        return reader.read(DATA_POINT_FILE, dimension, numberOfValues);
+        return reader.read(inputFile, dimension, numberOfValues);
     }
 
     public void storeMeasure(long measure, long totalTime) throws Exception {
-        if (WRITE_OUTPUT) {
+        if (writeOutput) {
             Run currentRun = new Run(measure,
                     totalTime,
                     this.numberOfValues,
@@ -63,7 +66,7 @@ public abstract class AbstractKmeans {
                     this.system,
                     this.taskset,
                     new Date().getTime());
-            try (SqliteRunRepository runRepository = new SqliteRunRepository(OUTPUT_DB)) {
+            try (SqliteRunRepository runRepository = new SqliteRunRepository(outputDB)) {
                 runRepository.dump(currentRun);
             }
         } else {

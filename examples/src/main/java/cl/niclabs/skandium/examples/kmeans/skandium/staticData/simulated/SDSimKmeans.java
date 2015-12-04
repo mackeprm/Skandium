@@ -20,20 +20,15 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
+
 public class SDSimKmeans extends AbstractKmeans {
     public SDSimKmeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
     public static void main(String[] args) throws Exception {
-        String[] defaultArgs;
-        if (args == null || args.length == 0) {
-            defaultArgs = new String[1];
-            defaultArgs[0] = "sd-sim";
-        } else {
-            defaultArgs = args;
-        }
-        AbstractKmeans kmeans = new SDSimKmeans(defaultArgs);
+        AbstractKmeans kmeans = new SDSimKmeans(getOrDefault(args, "sd-sim"));
         System.out.println(kmeans.toString());
         kmeans.run();
     }

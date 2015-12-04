@@ -17,20 +17,15 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
+
 public class SDHPKmeans extends AbstractKmeans {
     public SDHPKmeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
     public static void main(String[] args) throws Exception {
-        String[] defaultArgs;
-        if (args == null || args.length == 0) {
-            defaultArgs = new String[1];
-            defaultArgs[0] = "sd-hp";
-        } else {
-            defaultArgs = args;
-        }
-        AbstractKmeans kmeans = new SDHPKmeans(defaultArgs);
+        AbstractKmeans kmeans = new SDHPKmeans(getOrDefault(args, "sd-hp"));
         System.out.println(kmeans.toString());
         kmeans.run();
     }

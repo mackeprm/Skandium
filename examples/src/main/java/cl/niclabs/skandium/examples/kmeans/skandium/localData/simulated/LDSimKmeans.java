@@ -16,20 +16,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
+
 public class LDSimKmeans extends AbstractKmeans {
     public LDSimKmeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
     public static void main(String[] args) throws Exception {
-        String[] defaultArgs;
-        if (args == null || args.length == 0) {
-            defaultArgs = new String[1];
-            defaultArgs[0] = "ld-sim";
-        } else {
-            defaultArgs = args;
-        }
-        AbstractKmeans kmeans = new LDSimKmeans(defaultArgs);
+        AbstractKmeans kmeans = new LDSimKmeans(getOrDefault(args, "ld-sim"));
         System.out.println(kmeans.toString());
         kmeans.run();
     }
