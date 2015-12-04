@@ -3,7 +3,6 @@ package cl.niclabs.skandium.examples.kmeans.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MaximizationSteps {
 
@@ -27,32 +26,29 @@ public class MaximizationSteps {
     //https://en.wikipedia.org/wiki/Geometric_median ?
     //https://de.wikipedia.org/wiki/Median
     public static Point calculateMedianOf(final List<Point> points, final int dimension) {
-        List<Double> resultValues = new ArrayList<>(dimension);
-        List<List<Double>> dimensionValues = new ArrayList<>(dimension);
-        for (int i = 0; i < dimension; i++) {
-            dimensionValues.add(new ArrayList<>(points.size()));
-        }
-        for (Point point : points) {
-            int currentDimension = 0;
-            for (Double currentValue : point.getValues()) {
-                dimensionValues.get(currentDimension).add(currentValue);
-                currentDimension++;
+        final List<Double> resultValues = new ArrayList<>(dimension);
+        double[][] dimensionValues = new double[dimension][points.size()];
+        for (int pointIndex = 0; pointIndex < points.size(); pointIndex++) {
+            List<Double> currentValues = points.get(pointIndex).getValues();
+            for (int dimensionIndex = 0; dimensionIndex < dimension; dimensionIndex++) {
+                dimensionValues[dimensionIndex][pointIndex] = currentValues.get(dimensionIndex);
             }
         }
-        resultValues.addAll(dimensionValues.stream().map(MaximizationSteps::medianOf).collect(Collectors.toList()));
+        for (int i = 0; i < dimension; i++) {
+            resultValues.add(medianOf(dimensionValues[i]));
+        }
         return new Point(resultValues);
     }
 
-    static Double medianOf(List<Double> doubles) {
+    static double medianOf(double[] doubles) {
         double median;
-        int size = doubles.size();
-        Double[] input = doubles.toArray(new Double[doubles.size()]);
-        Arrays.sort(input);
+        int size = doubles.length;
+        Arrays.sort(doubles);
         if (size % 2 == 0) {
             //the median is then usually defined to be the mean of the two middle values [1] [2] (the median of {3, 5, 7, 9} is (5 + 7) / 2 = 6)
-            median = (input[((size / 2) - 1)] + input[(size / 2)]) / 2.0;
+            median = (doubles[((size / 2) - 1)] + doubles[(size / 2)]) / 2.0;
         } else {
-            median = input[(size / 2)];
+            median = doubles[(size / 2)];
         }
         return median;
     }

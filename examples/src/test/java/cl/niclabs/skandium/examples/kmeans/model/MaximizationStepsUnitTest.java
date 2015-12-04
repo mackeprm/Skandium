@@ -12,10 +12,10 @@ public class MaximizationStepsUnitTest {
 
     @Test
     public void testMedian() {
-        final List<Double> even = Arrays.asList(3d, 5d, 7d, 9d);
+        final double[] even = {3d, 5d, 7d, 9d};
         //{3, 5, 7, 9} is (5 + 7) / 2 = 6)
         assertThat(MaximizationSteps.medianOf(even)).isEqualTo(6.0);
-        final List<Double> odd = Arrays.asList(3d, 3d, 5d, 9d, 11d);
+        final double[] odd = {3d, 3d, 5d, 9d, 11d};
         assertThat(MaximizationSteps.medianOf(odd)).isEqualTo(5.0);
     }
 
