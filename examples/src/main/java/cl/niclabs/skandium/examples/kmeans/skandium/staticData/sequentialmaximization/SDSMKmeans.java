@@ -41,7 +41,7 @@ public class SDSMKmeans extends AbstractKmeans {
             final List<Point> data = getDataFromFile();
             final List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
             final Range startRange = new Range(0, data.size(), clusterCenters);
-            System.out.println("init: " + (System.currentTimeMillis() - allInit) + "[ms]");
+            System.out.println("init: " + (System.currentTimeMillis() - totalInit) + "[ms]");
 
             SMKmeans<Range> kmeans = new SMKmeans<>(
                     new SplitInSubranges(numberOfThreads),
