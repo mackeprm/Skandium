@@ -2,6 +2,7 @@ package cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequentialmaximi
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
+import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.examples.kmeans.skandium.GlobalIterationsConvergenceCriterion;
@@ -21,6 +22,10 @@ import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
 public class SDSMKmeans extends AbstractKmeans {
     public SDSMKmeans(String[] args) throws UnknownHostException {
         super(args);
+    }
+
+    public SDSMKmeans(KMeansRunConfiguration config) throws UnknownHostException {
+        super(config);
     }
 
     public static void main(String[] args) throws Exception {

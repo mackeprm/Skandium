@@ -31,6 +31,14 @@ public abstract class AbstractKmeans {
     public AbstractKmeans(String[] args) throws UnknownHostException {
         KMeansRunConfiguration config = new KMeansRunConfiguration();
         new JCommander(config, args);
+        parseConfig(config);
+    }
+
+    public AbstractKmeans(KMeansRunConfiguration config) throws UnknownHostException {
+        parseConfig(config);
+    }
+
+    private void parseConfig(KMeansRunConfiguration config) throws UnknownHostException {
         this.flavour = config.flavour;
         this.system = InetAddress.getLocalHost().getHostName();
         this.numberOfValues = config.numberOfValues;
@@ -43,6 +51,7 @@ public abstract class AbstractKmeans {
         this.inputFile = config.inputFile;
         this.outputDB = config.outputDB;
         this.writeOutput = config.writeOutput;
+        this.seed = config.seed;
     }
 
     abstract public void run() throws Exception;

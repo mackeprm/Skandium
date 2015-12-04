@@ -1,5 +1,6 @@
 package cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequential;
 
+import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.model.*;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 
@@ -14,6 +15,10 @@ public class SDSeqKmeans extends AbstractKmeans {
 
     public SDSeqKmeans(String[] args) throws UnknownHostException {
         super(args);
+    }
+
+    public SDSeqKmeans(KMeansRunConfiguration config) throws UnknownHostException {
+        super(config);
     }
 
     public static void main(String[] args) throws Exception {

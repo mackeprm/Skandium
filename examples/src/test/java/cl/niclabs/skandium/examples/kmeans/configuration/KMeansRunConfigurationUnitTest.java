@@ -2,6 +2,7 @@ package cl.niclabs.skandium.examples.kmeans.configuration;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -75,4 +76,21 @@ public class KMeansRunConfigurationUnitTest {
 
     }
 
+    @Test
+    @Ignore("learning test")
+    public void testLiveConfig() {
+        String[] args = {"-in", "/dev/shm/randomPoints-d3-n10000000.csv", "-out", "initial.db", "-live", "-f", "sd-sm", "-n", "4800000", "-k", "10", "-d", "3", "-i", "10", "-p", "1", "-t", "69-69"};
+        KMeansRunConfiguration config = new KMeansRunConfiguration();
+        new JCommander(config, args);
+        assertThat(config.inputFile).isEqualTo("/dev/shm/randomPoints-d3-n10000000.csv");
+        assertThat(config.outputDB).isEqualTo("initial.db");
+        assertThat(config.numberOfValues).isEqualTo(4800000);
+        assertThat(config.numberOfClusterCenters).isEqualTo(10);
+        assertThat(config.dimension).isEqualTo(3);
+        assertThat(config.numberOfIterations).isEqualTo(10);
+        assertThat(config.numberOfThreads).isEqualTo(1);
+        assertThat(config.taskset).isEqualTo("69-69");
+        assertThat(config.flavour).isEqualTo("sd-sm");
+        assertThat(config.writeOutput).isTrue();
+    }
 }

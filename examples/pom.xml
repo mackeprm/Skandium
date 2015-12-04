@@ -20,8 +20,14 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>cl.niclabs.skandium</groupId>
-            <artifactId>statistics</artifactId>
+            <groupId>cl.niclabs.skandium.statistics</groupId>
+            <artifactId>statsdb</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cl.niclabs.skandium.statistics</groupId>
+            <artifactId>generators</artifactId>
+            <scope>test</scope>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- External dependencies -->
