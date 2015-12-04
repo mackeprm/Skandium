@@ -11,18 +11,19 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractKmeans {
-    public static final String OUTPUT_DB = "output.db";
-    public static boolean WRITE_OUTPUT = true;
+    public static final String OUTPUT_DB = "sequential.db";
+    private static final String DATA_POINT_FILE = "/tmp/randomPoints-d3-n10000000.csv";
+    public static boolean WRITE_OUTPUT = false;
     public String flavour;
     public String system;
     public String taskset;
 
     public int numberOfThreads = Runtime.getRuntime().availableProcessors();
     public int partitions = Runtime.getRuntime().availableProcessors();
-    public int numberOfClusterCenters = 3;
+    public int numberOfClusterCenters = 10;
     public int numberOfIterations = 10;
     public int dimension = 3;
-    public int numberOfValues = 50_000;
+    public int numberOfValues = 600;
     public long seed = 4711l;
 
 
@@ -45,12 +46,13 @@ public abstract class AbstractKmeans {
 
     public List<Point> getDataFromFile() throws IOException {
         FileDataReader reader = new FileDataReader();
-        return reader.read("/tmp/randomPoints-d3-n10000000.csv", dimension, numberOfValues);
+        return reader.read(DATA_POINT_FILE, dimension, numberOfValues);
     }
 
-    public void storeMeasure(long measure) throws Exception {
+    public void storeMeasure(long measure, long totalTime) throws Exception {
         if (WRITE_OUTPUT) {
             Run currentRun = new Run(measure,
+                    totalTime,
                     this.numberOfValues,
                     this.numberOfClusterCenters,
                     this.dimension,

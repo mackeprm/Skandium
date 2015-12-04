@@ -20,6 +20,20 @@ public class MaximizationSteps {
         return new Point(Arrays.asList(centroid));
     }
 
+    //median for each dimension using the manhattan distance:
+    //see https://en.wikipedia.org/wiki/K-medians_clustering
+    //https://en.wikipedia.org/wiki/Geometric_median ?
+    //https://de.wikipedia.org/wiki/Median
+    /*public static Point calculateMedianOf(final List<Point> points, final int dimension) {
+
+    }
+
+    private static Double medianOf(List<Double> input) {
+        int size = input.size();
+        //http://stackoverflow.com/questions/2114797/compute-median-of-values-stored-in-vector-c
+
+    }*/
+
     /*
     Swap-step: Within each cluster, each point is tested as a potential medoid by checking if the sum of within-cluster distances gets smaller using that point as the medoid. If so, the point is defined as a new medoid. Every point is then assigned to the cluster with the closest medoid.
      */

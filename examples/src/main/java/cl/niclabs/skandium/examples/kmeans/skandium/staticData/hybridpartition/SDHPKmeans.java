@@ -37,6 +37,7 @@ public class SDHPKmeans extends AbstractKmeans {
 
     @Override
     public void run() throws Exception {
+        long totalInit = System.currentTimeMillis();
         try (final Skandium skandium = new Skandium(numberOfThreads)) {
             final List<Point> data = getDataFromFile();
             final List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
@@ -60,11 +61,11 @@ public class SDHPKmeans extends AbstractKmeans {
 
             long measure = System.currentTimeMillis() - init;
             System.out.println("time:" + measure + "[ms]");
-            storeMeasure(measure);
             int index = 0;
             for (Point clusterCenter : result.clusters) {
                 System.out.println(index++ + " : " + clusterCenter);
             }
+            storeMeasure(measure, System.currentTimeMillis() - totalInit);
         }
     }
 }

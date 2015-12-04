@@ -35,6 +35,7 @@ public class LDSimKmeans extends AbstractKmeans {
     }
 
     public void run() throws Exception {
+        long totalInit = System.currentTimeMillis();
         final RandomDataSetGenerator randomDataSetGenerator = new RandomDataSetGenerator(dimension, seed);
         final List<Point> data = randomDataSetGenerator.generatePoints(numberOfValues);
         List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
@@ -63,11 +64,11 @@ public class LDSimKmeans extends AbstractKmeans {
 
             long measure = System.currentTimeMillis() - init;
             System.out.println("time:" + measure + "[ms]");
-            storeMeasure(measure);
             int index = 0;
             for (Point clusterCenter : clusterCenters) {
                 System.out.println(index++ + " : " + clusterCenter);
             }
+            storeMeasure(measure, System.currentTimeMillis() - totalInit);
         }
     }
 }

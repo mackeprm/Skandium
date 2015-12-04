@@ -37,6 +37,7 @@ public class LDMMKmeans extends AbstractKmeans {
 
     @Override
     public void run() throws Exception {
+        long totalInit = System.currentTimeMillis();
         try (final Skandium skandium = new Skandium(numberOfThreads)) {
 
             //1. Expectation Step
@@ -73,11 +74,11 @@ public class LDMMKmeans extends AbstractKmeans {
 
             long measure = System.currentTimeMillis() - init;
             System.out.println("time:" + measure + "[ms]");
-            storeMeasure(measure);
             int index = 0;
             for (Point clusterCenter : result.getClusterCenters()) {
                 System.out.println(index++ + " : " + clusterCenter);
             }
+            storeMeasure(measure, System.currentTimeMillis() - totalInit);
         }
     }
 }
