@@ -2,8 +2,11 @@ package cl.niclabs.skandium.examples.kmeans;
 
 import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
+import cl.niclabs.skandium.examples.kmeans.skandium.kmedian.staticData.SDMMKmedian;
+import cl.niclabs.skandium.examples.kmeans.skandium.kmedian.staticData.SDSeqKmedian;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.hybridpartition.SDHPKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.SDMMKmeans;
+import cl.niclabs.skandium.examples.kmeans.skandium.staticData.partialmerge.SDPMKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequential.SDSeqKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequentialmaximization.SDSMKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.simulated.SDSimKmeans;
@@ -46,6 +49,15 @@ public class Kmeans {
                 break;
             case "sd-sim":
                 result = new SDSimKmeans(config);
+                break;
+            case "sd-pm":
+                result = new SDPMKmeans(config);
+                break;
+            case "kmd-sd-seq":
+                result = new SDSeqKmedian(config);
+                break;
+            case "kmd-sd-mm":
+                result = new SDMMKmedian(config);
                 break;
             default:
                 throw new IllegalStateException("unrecognized flavor:" + flavour);
