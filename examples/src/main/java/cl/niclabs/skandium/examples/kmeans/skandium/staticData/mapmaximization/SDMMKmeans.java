@@ -22,6 +22,10 @@ import java.util.concurrent.Future;
 import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
 
 public class SDMMKmeans extends AbstractKmeans {
+    //This is needed to prevent a NPE beeing thrown by the Task class that attempts to construct
+    //the final result array for a parent with the datatype of the last finished subtask. If the
+    //last subtask returned null (because of an empty cluster the whole thing breaks.
+    public static final Point EMPTY_CLUSTER_POINT = new Point("0");
 
     public SDMMKmeans(String[] args) throws UnknownHostException {
         super(args);

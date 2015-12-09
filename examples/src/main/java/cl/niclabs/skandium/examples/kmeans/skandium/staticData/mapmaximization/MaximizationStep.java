@@ -11,7 +11,7 @@ public class MaximizationStep implements Execute<List<Point>, Point> {
     public Point execute(List<Point> param) throws Exception {
         if (param == null || param.isEmpty()) {
             System.err.println("empty cluster detected");
-            return null;
+            return SDMMKmeans.EMPTY_CLUSTER_POINT;
         } else {
             return MaximizationSteps.calculateMeanOf(param, param.get(0).getDimension());
         }
