@@ -31,9 +31,9 @@ public class SequentialRangeMaximizationStep implements Execute<Range, Range> {
             clusters.get(currentIndex).add(data.get(i));
         }
         final List<Point> newClusterCenters = new ArrayList<>(numberOfClusterCenters);
-        if (clusters.size() != numberOfClusterCenters) {
+        /*if (clusters.size() != numberOfClusterCenters) {
             System.err.println("WARNING: Empty Cluster removed");
-        }
+        }*/
         newClusterCenters.addAll(clusters.entrySet().stream().map(entry -> MaximizationSteps.calculateMeanOf(entry.getValue(), entry.getValue().get(0).getDimension())).collect(Collectors.toList()));
         final Range result = new Range(0, data.size());
         result.clusters = newClusterCenters;

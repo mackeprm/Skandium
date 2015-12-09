@@ -11,8 +11,8 @@ public class MMKmedianMaximizationStep implements Execute<List<Point>, Point> {
     @Override
     public Point execute(List<Point> param) throws Exception {
         if (param == null || param.isEmpty()) {
-            System.err.println("empty cluster detected");
-            return null;
+            //System.err.println("empty cluster detected");
+            return Point.EMPTY_CLUSTER_POINT;
         } else {
             return MaximizationSteps.calculateMedianOf(param, param.get(0).getDimension());
         }

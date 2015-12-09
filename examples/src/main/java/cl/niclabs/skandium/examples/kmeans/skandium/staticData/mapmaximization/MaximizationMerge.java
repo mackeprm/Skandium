@@ -19,7 +19,7 @@ public class MaximizationMerge implements Merge<Point, Range> {
     public Range merge(Point[] param) throws Exception {
         final List<Point> newClusterCenters = new ArrayList<>(param.length);
         for(Point p : param) {
-            if (p != null && p != SDMMKmeans.EMPTY_CLUSTER_POINT) {
+            if (p != null && p != Point.EMPTY_CLUSTER_POINT) {
                 newClusterCenters.add(p);
             }
         }
