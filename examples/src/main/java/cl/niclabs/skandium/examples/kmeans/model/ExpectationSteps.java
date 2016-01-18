@@ -27,7 +27,7 @@ public class ExpectationSteps {
     }
 
 
-    static double euclideanDistance(List<Double> source, List<Double> destination) {
+    public static double euclideanDistance(List<Double> source, List<Double> destination) {
         double sum = 0;
         for (int i = 0; i < source.size(); i++) {
             final double dp = source.get(i) - destination.get(i);
