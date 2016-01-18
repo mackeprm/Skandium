@@ -32,7 +32,7 @@ public class SDSeqcmeans extends AbstractKmeans {
         long totalInit = System.currentTimeMillis();
         final List<Point> data = getDataFromFile();
         List<Point> clusterCenters = null;
-        double[][] membershipMatrix = randomizedMembershipValues();
+        double[][] membershipMatrix = CmeansUtils.randomizedMembershipValues(numberOfClusterCenters, numberOfValues, new Random(this.seed));
 
         long init = System.currentTimeMillis();
         // ITERATION
@@ -94,30 +94,5 @@ public class SDSeqcmeans extends AbstractKmeans {
         }
 
         return clusterCenters;
-    }
-
-    private double[][] randomizedMembershipValues() {
-        double[][] membershipMatrix = new double[numberOfClusterCenters][numberOfValues];
-        for (int i = 0; i < numberOfValues; i++) {
-            double[] randomMembershipValues = getRandomMemberShipValues(numberOfClusterCenters);
-            for (int k = 0; k < numberOfClusterCenters; k++) {
-                membershipMatrix[k][i] = randomMembershipValues[k];
-            }
-        }
-        return membershipMatrix;
-    }
-
-    private double[] getRandomMemberShipValues(int numberOfClusterCenters) {
-        Random random = new Random();
-        double[] values = new double[numberOfClusterCenters];
-        double min = 0.0, sum = 0.0;
-        for (int i = 0; i < numberOfClusterCenters - 1; i++) {
-            double nextDouble = min + (random.nextDouble() * (1.0 - min));
-            sum += nextDouble - min;
-            values[i] = nextDouble - min;
-            min = nextDouble;
-        }
-        values[numberOfClusterCenters - 1] = 1.0 - sum;
-        return values;
     }
 }
