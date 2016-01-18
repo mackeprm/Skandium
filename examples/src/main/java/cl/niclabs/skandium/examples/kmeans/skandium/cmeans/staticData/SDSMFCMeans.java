@@ -2,6 +2,7 @@ package cl.niclabs.skandium.examples.kmeans.skandium.cmeans.staticData;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
+import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.examples.kmeans.skandium.GlobalIterationsConvergenceCriterion;
@@ -16,6 +17,10 @@ import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
 
 public class SDSMFCMeans extends AbstractKmeans {
     final double fuzzynessIndex = 2;
+
+    public SDSMFCMeans(KMeansRunConfiguration config) throws UnknownHostException {
+        super(config);
+    }
 
     public SDSMFCMeans(String[] args) throws UnknownHostException {
         super(args);

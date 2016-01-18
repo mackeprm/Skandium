@@ -1,6 +1,7 @@
 package cl.niclabs.skandium.examples.kmeans.skandium.cmeans.staticData;
 
 
+import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.ExpectationSteps;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
@@ -15,6 +16,10 @@ import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
 public class SDSeqcmeans extends AbstractKmeans {
 
     final double fuzzynessIndex = 2;
+
+    public SDSeqcmeans(KMeansRunConfiguration config) throws UnknownHostException {
+        super(config);
+    }
 
     public SDSeqcmeans(String[] args) throws UnknownHostException {
         super(args);
