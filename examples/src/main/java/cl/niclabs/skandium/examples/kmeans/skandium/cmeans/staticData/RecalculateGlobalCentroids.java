@@ -19,25 +19,28 @@ public class RecalculateGlobalCentroids implements Merge<PartialResult, FuzzyRan
 
     @Override
     public FuzzyRange merge(PartialResult[] param) throws Exception {
-        final List<Point> newClusterCenters = new ArrayList<>(numberOfClusters);
-        final double[] globalSum = new double[param.length];
-        double globalAmount = 0.0;
-        for (PartialResult partialResult : param) {
-            final double[] partialSums = partialResult.partialSums;
-            for (int d = 0; d < partialSums.length; d++) {
-                globalSum[d] += partialSums[d];
+        List<Point> newClusterCenters = new ArrayList<>(numberOfClusters);
+        double globalAmount[] = new double[numberOfClusters];
+        double globalVectors[][] = new double[numberOfClusters][dimension];
+        for (int k = 0; k < numberOfClusters; k++) {
+            for (PartialResult partialResult : param) {
+                globalAmount[k] += partialResult.localAmount[k];
+                for (int d = 0; d < dimension; d++) {
+                    globalVectors[k][d] += partialResult.localVectors[k][d];
+                }
             }
-            globalAmount += partialResult.amount;
         }
         for (int k = 0; k < numberOfClusters; k++) {
-            final List<Double> values = new ArrayList<>(dimension);
-            for (int d = 0; d < dimension; d++) {
-                values.add(globalSum[d] / globalAmount);
-            }
-            newClusterCenters.add(new Point(values));
+            newClusterCenters.add(new Point(getCentroidFor(globalAmount[k], globalVectors[k])));
         }
-        FuzzyRange result = new FuzzyRange(0, numberOfValues, param[0].membershipMatrix);
-        result.clusters = newClusterCenters;
+        return new FuzzyRange(0, numberOfValues, param[0].membershipMatrix, newClusterCenters);
+    }
+
+    private List<Double> getCentroidFor(double globalSum, double[] globalVector) {
+        List<Double> result = new ArrayList<>(dimension);
+        for (double value : globalVector) {
+            result.add(value / globalSum);
+        }
         return result;
     }
 }

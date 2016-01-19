@@ -18,7 +18,7 @@ public class SequentialMembershipRecalculation implements Execute<FuzzyRange, Fu
 
     @Override
     public FuzzyRange execute(FuzzyRange param) throws Exception {
-        return new FuzzyRange(param.left, param.right, updateMembershipMatrix(param.localMembershipMatrix, param.clusters, data));
+        return new FuzzyRange(param.left, param.right, updateMembershipMatrix(param.localMembershipMatrix, param.clusters, data), param.clusters);
     }
 
     private double[][] updateMembershipMatrix(double[][] membershipMatrix, List<Point> clusterCenters, List<Point> data) {

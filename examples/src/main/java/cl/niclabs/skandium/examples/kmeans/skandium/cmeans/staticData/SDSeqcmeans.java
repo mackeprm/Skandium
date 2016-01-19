@@ -31,6 +31,7 @@ public class SDSeqcmeans extends AbstractKmeans {
         kmeans.run();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void run() throws Exception {
         //INIT

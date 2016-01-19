@@ -1,12 +1,12 @@
 package cl.niclabs.skandium.examples.kmeans.skandium.cmeans.staticData;
 
 public class PartialResult {
-    double amount;
-    double[] partialSums;
+    double[] localAmount;
+    double[][] localVectors;
     double[][] membershipMatrix;
 
-    public PartialResult(double[] localSums, double localAmount) {
-        this.amount = localAmount;
-        this.partialSums = localSums;
+    public PartialResult(double[] localAmount, double[][] localVectors) {
+        this.localAmount = localAmount;
+        this.localVectors = localVectors;
     }
 }

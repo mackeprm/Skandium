@@ -24,7 +24,7 @@ public class SplitInFuzzySubranges implements Split<FuzzyRange, FuzzyRange> {
             final int left = i;
             //give the full matrix because it wont be edited:
             final int right = Math.min(dataSize, i + chunkLength);
-            result[currentChunk] = new FuzzyRange(left, right, param.localMembershipMatrix);
+            result[currentChunk] = new FuzzyRange(left, right, param.localMembershipMatrix, param.clusters);
             currentChunk++;
         }
         return result;

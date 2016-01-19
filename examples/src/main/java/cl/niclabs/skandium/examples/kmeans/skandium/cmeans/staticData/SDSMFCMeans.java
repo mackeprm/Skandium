@@ -27,7 +27,7 @@ public class SDSMFCMeans extends AbstractKmeans {
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractKmeans kmeans = new SDSeqcmeans(getOrDefault(args, "fcm-sd-sm"));
+        AbstractKmeans kmeans = new SDSMFCMeans(getOrDefault(args, "fcm-sd-sm"));
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -39,11 +39,11 @@ public class SDSMFCMeans extends AbstractKmeans {
             final List<Point> data = getDataFromFile();
             double[][] membershipMatrix = CmeansUtils.randomizedMembershipValues(numberOfClusterCenters, numberOfValues, new Random(this.seed));
 
-            final FuzzyRange startRange = new FuzzyRange(0, data.size(), membershipMatrix);
+            final FuzzyRange startRange = new FuzzyRange(0, data.size(), membershipMatrix, null);
 
             SMKmeans<FuzzyRange> kmeans = new SMKmeans<>(
                     new SplitInFuzzySubranges(numberOfThreads),
-                    new CalculateLocalSums(dimension, data, fuzzynessIndex),
+                    new CalculateLocalSums(dimension, data, fuzzynessIndex, numberOfClusterCenters),
                     new RecalculateGlobalCentroids(data.size(), numberOfClusterCenters, dimension),
                     new SequentialMembershipRecalculation(data, fuzzynessIndex),
                     new GlobalIterationsConvergenceCriterion<>(numberOfIterations)
