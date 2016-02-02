@@ -12,30 +12,30 @@ import static cl.niclabs.skandium.examples.kmeans.model.ExpectationSteps.nearest
 public class FilteringNodeVisitor {
 
     public static void visit(KDNode node, CandidateSet candidateSet) {
-        final List<Point> centroids = candidateSet.getCentroids();
+        final List<Point> localCentroids = new ArrayList<>(candidateSet.getCentroids());
         if (node.isLeaf()) {
-            int clusterIndex = nearestClusterCenterEuclidean(node.getWeightedCentroid(), centroids).getClusterIndex();
-            candidateSet.get(centroids.get(clusterIndex)).add(node.getWeightedCentroid());
+            int clusterIndex = nearestClusterCenterEuclidean(node.getWeightedCentroid(), localCentroids).getClusterIndex();
+            candidateSet.get(localCentroids.get(clusterIndex)).add(node.getWeightedCentroid());
         } else {
             final Point cellMidpoint = node.getMean();
-            int clusterIndex = nearestClusterCenterEuclidean(cellMidpoint, centroids).getClusterIndex();
+            int clusterIndex = nearestClusterCenterEuclidean(cellMidpoint, localCentroids).getClusterIndex();
 
-            final Point pivotCentroid = centroids.get(clusterIndex);
-            final List<Point> pivotList = new ArrayList<>(centroids.size());
-            pivotList.addAll(centroids);
+            final Point pivotCentroid = localCentroids.get(clusterIndex);
+            final List<Point> pivotList = new ArrayList<>(localCentroids.size());
+            pivotList.addAll(localCentroids);
             for (Point centroid : pivotList) {
                 if (centroid != pivotCentroid && isFartherThan(centroid, pivotCentroid, node.getCell())) {
-                    centroids.remove(centroid);
+                    localCentroids.remove(centroid);
                 }
             }
-            if (centroids.size() == 1) {
-                candidateSet.get(centroids.get(0)).add(node.getWeightedCentroid(), node.getCount());
+            if (localCentroids.size() == 1) {
+                candidateSet.get(localCentroids.get(0)).add(node.getWeightedCentroid(), node.getCount());
             } else {
                 //recursion:
-                visit(node.getBelow(), candidateSet);
-                visit(node.getAbove(), candidateSet);
+                final CandidateSet nextCandiates = new CandidateSet(localCentroids, candidateSet.candidates);
+                visit(node.getBelow(), nextCandiates);
+                visit(node.getAbove(), nextCandiates);
             }
-
         }
     }
 

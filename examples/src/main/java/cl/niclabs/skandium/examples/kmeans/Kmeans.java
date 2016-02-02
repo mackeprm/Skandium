@@ -12,6 +12,7 @@ import cl.niclabs.skandium.examples.kmeans.skandium.staticData.partialmerge.SDPM
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequential.SDSeqKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequentialmaximization.SDSMKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.simulated.SDSimKmeans;
+import cl.niclabs.skandium.examples.kmeans.skandium.staticData.treebased.sequential.SdKDSeqKmeans;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 
@@ -66,6 +67,9 @@ public class Kmeans {
                 break;
             case "fcm-sd-sm":
                 result = new SDSMFCMeans(config);
+                break;
+            case "kd-sd-seq":
+                result = new SdKDSeqKmeans(config);
                 break;
             default:
                 throw new IllegalStateException("unrecognized flavor:" + flavour);

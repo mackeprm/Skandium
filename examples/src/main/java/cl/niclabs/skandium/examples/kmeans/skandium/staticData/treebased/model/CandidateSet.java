@@ -10,8 +10,10 @@ import java.util.Map;
 
 public class CandidateSet {
     Map<Point, Partial> candidates;
+    List<Point> centroids;
 
     public CandidateSet(List<Point> centroids) {
+        this.centroids = centroids;
         int dimension = centroids.get(0).getDimension();
         candidates = new HashMap<>(centroids.size());
         for (Point centroid : centroids) {
@@ -19,8 +21,13 @@ public class CandidateSet {
         }
     }
 
+    public CandidateSet(List<Point> centroids, Map<Point, Partial> candidates) {
+        this.centroids = centroids;
+        this.candidates = candidates;
+    }
+
     public List<Point> getCentroids() {
-        return new ArrayList<>(candidates.keySet());
+        return this.centroids;
     }
 
     public List<Partial> getPartials() {
