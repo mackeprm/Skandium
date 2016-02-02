@@ -1,12 +1,7 @@
 package cl.niclabs.skandium.examples.kmeans.skandium.staticData.treebased.model;
 
 public class KDTree {
-    private final int dimensionality;
-    private Node root;
-
-    public KDTree(int dimensionality) {
-        this.dimensionality = dimensionality;
-    }
+    private KDNode root;
 
     @Override
     public String toString() {
@@ -19,35 +14,28 @@ public class KDTree {
         return sb.toString();
     }
 
-    private void buildString(StringBuilder sb, Node node) {
-        if (node == null) {
+    private void buildString(StringBuilder sb, KDNode KDNode) {
+        if (KDNode == null) {
             return;
         }
 
-        Node left = node.getBelow();
-        Node right = node.getAbove();
+        KDNode left = KDNode.getBelow();
+        KDNode right = KDNode.getAbove();
 
         if (left != null) {
             buildString(sb, left);
         }
-        sb.append(node.toString()).append("\n");
+        sb.append(KDNode.toString()).append("\n");
         if (right != null) {
             buildString(sb, right);
         }
     }
 
-    public Node getRoot() {
+    public KDNode getRoot() {
         return root;
     }
 
-    public void setRoot(Node newRoot) {
+    public void setRoot(KDNode newRoot) {
         root = newRoot;
-        if (root == null) {
-            return;
-        }
-
-        Hypercube region = new Hypercube(dimensionality);
-        region.initializeEmpty();
-        root.propagate(region);
     }
 }

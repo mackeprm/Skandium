@@ -24,7 +24,7 @@ public class Point {
         this(parseDoublesFrom(input));
     }
 
-    private static List<Double> parseDoublesFrom(String input) {
+    protected static List<Double> parseDoublesFrom(String input) {
         if (isBlank(input)) {
             throw new IllegalArgumentException("Input: '" + input + "' can not be parsed");
         }
@@ -47,5 +47,14 @@ public class Point {
     @Override
     public String toString() {
         return "Vector: " + values;
+    }
+
+    public Double[] subtract(Point subtract) {
+        final Double result[] = new Double[this.dimension];
+        final List<Double> values = subtract.getValues();
+        for (int d = 0; d < this.dimension; d++) {
+            result[d] = this.values.get(d) - values.get(d);
+        }
+        return result;
     }
 }

@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Partial {
-    double[] sum;
-    int count;
+    public double[] sum;
+    public int count;
 
     public Partial(int dimension) {
         sum = new double[dimension];
@@ -16,11 +16,7 @@ public class Partial {
     }
 
     public void add(Point point) {
-        List<Double> values = point.getValues();
-        for (int i = 0; i < values.size(); i++) {
-            sum[i] += values.get(i);
-        }
-        count++;
+        add(point, 1);
     }
 
     public void add(Partial other) {
@@ -28,5 +24,13 @@ public class Partial {
         for (int i = 0; i < sum.length; i++) {
             sum[i] += other.sum[i];
         }
+    }
+
+    public void add(Point weightedPoint, int count) {
+        List<Double> values = weightedPoint.getValues();
+        for (int i = 0; i < values.size(); i++) {
+            sum[i] += values.get(i);
+        }
+        this.count += count;
     }
 }
