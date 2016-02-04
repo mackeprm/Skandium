@@ -46,12 +46,23 @@ public class SdKDRDKmeans extends AbstractKmeans {
             List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
 
             //initialization:
+            int dataSize = data.size();
+            if (dataSize < numberOfThreads) {
+                throw new IllegalStateException("input was smaller than number of chunks");
+            }
+
+            double chunkSize = (double) dataSize / (double) numberOfThreads;
+            double ceil = Math.ceil(chunkSize);
+            final int chunkLength = (int) ceil;
+
+
             KDTreeGenerator kdTreeGenerator = new KDTreeGenerator();
             final KDTree trees[] = new KDTree[numberOfThreads];
             //Split input data
-
-            //create p kd-trees
-
+            for (int i = 0; i < numberOfThreads; i++) {
+                final int currentChunkStart = i * chunkLength;
+                trees[i] = kdTreeGenerator.generate(data.subList(currentChunkStart, Math.min(dataSize, currentChunkStart + chunkLength)));
+            }
 
             CandidateSet start = new CandidateSet(clusterCenters);
 
@@ -63,14 +74,15 @@ public class SdKDRDKmeans extends AbstractKmeans {
                         return localCandidateSet;
                     },
                     partialCandidateSets -> {
-                        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection") final List<Partial> resultPartials = new ArrayList<>(numberOfClusterCenters);
+                        final CandidateSet globalPartials = new CandidateSet(clusterCenters);
                         for (CandidateSet partialCandidateSet : partialCandidateSets) {
-                            List<Partial> partials = partialCandidateSet.getPartials();
-                            for (int i = 0; i < partials.size(); i++) {
-                                resultPartials.get(i).add(partials.get(i));
+                            final List<Point> centroids = partialCandidateSet.getCentroids();
+                            for (Point centroid : centroids) {
+                                globalPartials.get(centroid).add(partialCandidateSet.get(centroid));
                             }
                         }
                         //merge
+                        final List<Partial> resultPartials = globalPartials.getPartials();
                         final List<Point> newClusterCenters = new ArrayList<>(resultPartials.size());
                         newClusterCenters.addAll(resultPartials.stream().filter(p -> p.count > 0).map(partial -> calculateMeanOf(partial, dimension)).collect(Collectors.toList()));
                         return new CandidateSet(newClusterCenters);
