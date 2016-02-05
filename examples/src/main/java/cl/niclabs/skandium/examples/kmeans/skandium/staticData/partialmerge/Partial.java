@@ -33,4 +33,12 @@ public class Partial {
         }
         this.count += count;
     }
+
+    @Override
+    public String toString() {
+        return "partial{" +
+                "wghtC=" + Arrays.toString(sum) +
+                ", count=" + count +
+                '}';
+    }
 }

@@ -6,10 +6,7 @@ import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.partialmerge.Partial;
-import cl.niclabs.skandium.examples.kmeans.skandium.staticData.treebased.model.CandidateSet;
-import cl.niclabs.skandium.examples.kmeans.skandium.staticData.treebased.model.FilteringNodeVisitor;
-import cl.niclabs.skandium.examples.kmeans.skandium.staticData.treebased.model.KDTree;
-import cl.niclabs.skandium.examples.kmeans.skandium.staticData.treebased.model.KDTreeGenerator;
+import cl.niclabs.skandium.examples.kmeans.skandium.staticData.treebased.model.*;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 import cl.niclabs.skandium.skeletons.Map;
 import cl.niclabs.skandium.skeletons.Skeleton;
@@ -64,17 +61,22 @@ public class SdKDRDKmeans extends AbstractKmeans {
                 trees[i] = kdTreeGenerator.generate(data.subList(currentChunkStart, Math.min(dataSize, currentChunkStart + chunkLength)));
             }
 
-            CandidateSet start = new CandidateSet(clusterCenters);
-
-            Skeleton<CandidateSet, CandidateSet> partialMergeKmeans = new Map<>(
-                    input -> trees,
-                    tree -> {
-                        final CandidateSet localCandidateSet = new CandidateSet(clusterCenters);
-                        FilteringNodeVisitor.visit(tree.getRoot(), localCandidateSet);
-                        return localCandidateSet;
+            final Skeleton<CandidateSet, CandidateSet> partialMergeKmeans = new Map<>(
+                    input -> {
+                        PartialTree[] partialTrees = new PartialTree[trees.length];
+                        for (int i = 0; i < trees.length; i++) {
+                            partialTrees[i] = new PartialTree(trees[i], input);
+                        }
+                        return partialTrees;
+                    },
+                    partialTree -> {
+                        final KDNode root = partialTree.getKdTree().getRoot();
+                        final CandidateSet candidateSet = partialTree.getLocalCandidateSet();
+                        FilteringNodeVisitor.visit(root, candidateSet);
+                        return candidateSet;
                     },
                     partialCandidateSets -> {
-                        final CandidateSet globalPartials = new CandidateSet(clusterCenters);
+                        final CandidateSet globalPartials = new CandidateSet(partialCandidateSets[0].getCentroids());
                         for (CandidateSet partialCandidateSet : partialCandidateSets) {
                             final List<Point> centroids = partialCandidateSet.getCentroids();
                             for (Point centroid : centroids) {
@@ -89,8 +91,10 @@ public class SdKDRDKmeans extends AbstractKmeans {
                     }
             );
 
-            long init = System.currentTimeMillis();
+            CandidateSet start = new CandidateSet(clusterCenters);
             Stream<CandidateSet, CandidateSet> stream = skandium.newStream(partialMergeKmeans);
+
+            long init = System.currentTimeMillis();
             for (int i = 0; i < numberOfIterations; i++) {
                 final CandidateSet result = stream.input(start).get();
                 start = result;
