@@ -3,16 +3,13 @@ package cl.niclabs.skandium.examples.kmeans.manual;
 
 import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
-import cl.niclabs.skandium.examples.kmeans.model.ExpectationSteps;
 import cl.niclabs.skandium.examples.kmeans.model.Point;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.partialmerge.Partial;
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
 
@@ -35,40 +32,32 @@ public class SDManualKMeans extends AbstractKmeans {
     public void run() throws Exception {
         long totalInit = System.currentTimeMillis();
         final List<Point> data = getDataFromFile();
-        List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
-        final Range startRange = new Range(0, data.size());
-
         final Range[] ranges = splitInSubranges(data);
-
-        List<Thread> threads = new ArrayList<>(numberOfThreads);
-
-        for (int i = 0; i < numberOfThreads; i++) {
-            final int currentThread = i;
-            threads.add(new Thread(() -> {
-                final Range localRange = ranges[currentThread];
-
-                final Map<Integer, Partial> partials = new HashMap<>();
-                for (int j = localRange.left; j < localRange.right; j++) {
-                    Point currentPoint = data.get(j);
-                    int clusterIndex = ExpectationSteps.nearestClusterCenterEuclidean(currentPoint, clusterCenters).getClusterIndex();
-                    if (partials.get(clusterIndex) == null) {
-                        partials.put(clusterIndex, new Partial(currentPoint.getDimension()));
-                    }
-                    partials.get(clusterIndex).add(currentPoint);
-                }
-                //TODO return: sync with global object.
-            }));
-        }
+        List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
 
         long init = System.currentTimeMillis();
+        for (int i = 0; i < this.numberOfIterations; i++) {
+            List<ManualAssignmentStep> threads = new ArrayList<>(numberOfThreads);
+            for (int k = 0; k < numberOfThreads; k++) {
+                threads.add(new ManualAssignmentStep(data, ranges[k], clusterCenters));
+                threads.get(k).start();
+            }
 
+            Map<Integer, Partial> globalPartials = new HashMap<>();
+            for (ManualAssignmentStep thread : threads) {
+                thread.join();
+                //update Partials
+                for (Map.Entry<Integer, Partial> entry : thread.getPartials().entrySet()) {
+                    if (globalPartials.get(entry.getKey()) == null) {
+                        globalPartials.put(entry.getKey(), new Partial(dimension));
+                    }
+                    globalPartials.get(entry.getKey()).add(entry.getValue());
+                }
+            }
 
-        for (Thread thread : threads) {
-            thread.start();
-        }
-
-        for (Thread thread : threads) {
-            thread.join();
+            final List<Point> newClusterCenters = new ArrayList<>(globalPartials.size());
+            newClusterCenters.addAll(globalPartials.values().stream().map(partial -> calculateMeanOf(partial, dimension)).collect(Collectors.toList()));
+            clusterCenters = newClusterCenters;
         }
         long measure = System.currentTimeMillis() - init;
         System.out.println("time:" + measure + "[ms]");
@@ -95,4 +84,11 @@ public class SDManualKMeans extends AbstractKmeans {
         return result;
     }
 
+    private Point calculateMeanOf(Partial partial, int dimension) {
+        final Double[] centroid = new Double[dimension];
+        for (int i = 0; i < dimension; i++) {
+            centroid[i] = partial.sum[i] / (double) partial.count;
+        }
+        return new Point(Arrays.asList(centroid));
+    }
 }
