@@ -1,7 +1,8 @@
 package cl.niclabs.skandium.examples.kmeans;
 
 import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
-import cl.niclabs.skandium.examples.kmeans.manual.SDManualKMeans;
+import cl.niclabs.skandium.examples.kmeans.manual.SDManualPmKMeans;
+import cl.niclabs.skandium.examples.kmeans.manual.SDManualSmKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.cmeans.staticData.SDSMFCMeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.cmeans.staticData.SDSeqcmeans;
@@ -52,8 +53,11 @@ public class Kmeans {
             case "sd-seq":
                 result = new SDSeqKmeans(config);
                 break;
-            case "sd-manual":
-                result = new SDManualKMeans(config);
+            case "sd-manual-pm":
+                result = new SDManualPmKMeans(config);
+                break;
+            case "sd-manual-sm":
+                result = new SDManualSmKmeans(config);
                 break;
             case "sd-sim":
                 result = new SDSimKmeans(config);

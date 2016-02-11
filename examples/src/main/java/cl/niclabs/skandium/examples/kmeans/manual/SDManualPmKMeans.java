@@ -8,22 +8,27 @@ import cl.niclabs.skandium.examples.kmeans.skandium.staticData.partialmerge.Part
 import cl.niclabs.skandium.examples.kmeans.util.Initialize;
 
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import static cl.niclabs.skandium.examples.kmeans.manual.Utils.calculateMeanOf;
+import static cl.niclabs.skandium.examples.kmeans.manual.Utils.splitInEqualSubranges;
 import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
 
-public class SDManualKMeans extends AbstractKmeans {
-    public SDManualKMeans(String[] args) throws UnknownHostException {
+public class SDManualPmKMeans extends AbstractKmeans {
+    public SDManualPmKMeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
-    public SDManualKMeans(KMeansRunConfiguration config) throws UnknownHostException {
+    public SDManualPmKMeans(KMeansRunConfiguration config) throws UnknownHostException {
         super(config);
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractKmeans kmeans = new SDManualKMeans(getOrDefault(args, "sd-manual"));
+        AbstractKmeans kmeans = new SDManualPmKMeans(getOrDefault(args, "sd-manual-pm"));
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -32,19 +37,19 @@ public class SDManualKMeans extends AbstractKmeans {
     public void run() throws Exception {
         long totalInit = System.currentTimeMillis();
         final List<Point> data = getDataFromFile();
-        final Range[] ranges = splitInSubranges(data);
+        final Range[] ranges = splitInEqualSubranges(data, numberOfThreads);
         List<Point> clusterCenters = Initialize.randomClusterCentersFrom(data, numberOfClusterCenters, seed);
 
         long init = System.currentTimeMillis();
         for (int i = 0; i < this.numberOfIterations; i++) {
-            List<ManualAssignmentStep> threads = new ArrayList<>(numberOfThreads);
+            List<PartialUpdateThread> threads = new ArrayList<>(numberOfThreads);
             for (int k = 0; k < numberOfThreads; k++) {
-                threads.add(new ManualAssignmentStep(data, ranges[k], clusterCenters));
+                threads.add(new PartialUpdateThread(data, ranges[k], clusterCenters));
                 threads.get(k).start();
             }
 
             Map<Integer, Partial> globalPartials = new HashMap<>();
-            for (ManualAssignmentStep thread : threads) {
+            for (PartialUpdateThread thread : threads) {
                 thread.join();
                 //update Partials
                 for (Map.Entry<Integer, Partial> entry : thread.getPartials().entrySet()) {
@@ -66,29 +71,5 @@ public class SDManualKMeans extends AbstractKmeans {
             System.out.println(index++ + " : " + clusterCenter);
         }
         storeMeasure(measure, System.currentTimeMillis() - totalInit);
-    }
-
-    private Range[] splitInSubranges(List<Point> data) {
-        Range[] result = new Range[numberOfThreads];
-        if (data.size() < numberOfThreads) {
-            throw new IllegalStateException("input was smaller than number of chunks");
-        }
-        double chunkSize = (double) data.size() / (double) numberOfThreads;
-        double ceil = Math.ceil(chunkSize);
-        final int chunkLength = (int) ceil;
-        int currentChunk = 0;
-        for (int i = 0; i < data.size(); i += chunkLength) {
-            result[currentChunk] = new Range(i, Math.min(data.size(), i + chunkLength));
-            currentChunk++;
-        }
-        return result;
-    }
-
-    private Point calculateMeanOf(Partial partial, int dimension) {
-        final Double[] centroid = new Double[dimension];
-        for (int i = 0; i < dimension; i++) {
-            centroid[i] = partial.sum[i] / (double) partial.count;
-        }
-        return new Point(Arrays.asList(centroid));
     }
 }

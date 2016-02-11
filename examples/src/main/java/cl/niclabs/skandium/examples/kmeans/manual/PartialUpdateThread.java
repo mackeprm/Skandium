@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ManualAssignmentStep extends Thread {
+public class PartialUpdateThread extends Thread {
     private final List<Point> data;
     private final Range localRange;
     private List<Point> clusterCenters;
     private Map<Integer, Partial> partials;
 
-    public ManualAssignmentStep(List<Point> data, Range range, List<Point> clusterCenters) {
+    public PartialUpdateThread(List<Point> data, Range range, List<Point> clusterCenters) {
         this.data = data;
         this.localRange = range;
         this.clusterCenters = clusterCenters;
