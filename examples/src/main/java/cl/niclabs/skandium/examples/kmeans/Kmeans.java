@@ -4,6 +4,8 @@ import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.manual.SDManualPmKMeans;
 import cl.niclabs.skandium.examples.kmeans.manual.SDManualSmKmeans;
 import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
+import cl.niclabs.skandium.examples.kmeans.sequential.staticData.SDSeqKmeans;
+import cl.niclabs.skandium.examples.kmeans.sequential.staticData.SdSeqPmKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.cmeans.staticData.SDSMFCMeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.cmeans.staticData.SDSeqcmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.kmedian.staticData.SDMMKmedian;
@@ -11,7 +13,6 @@ import cl.niclabs.skandium.examples.kmeans.skandium.kmedian.staticData.SDSeqKmed
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.hybridpartition.SDHPKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.SDMMKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.partialmerge.SDPMKmeans;
-import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequential.SDSeqKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequentialmaximization.SDSMKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.simulated.SDSimKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.treebased.randomdecomposition.SdKDRDKmeans;
@@ -52,6 +53,9 @@ public class Kmeans {
                 break;
             case "sd-seq":
                 result = new SDSeqKmeans(config);
+                break;
+            case "sd-seq-pm":
+                result = new SdSeqPmKmeans(config);
                 break;
             case "sd-manual-pm":
                 result = new SDManualPmKMeans(config);

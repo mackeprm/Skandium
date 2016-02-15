@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans.skandium.staticData.sequential;
+package cl.niclabs.skandium.examples.kmeans.sequential.staticData;
 
 import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.model.*;
