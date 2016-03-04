@@ -9,6 +9,7 @@ import cl.niclabs.skandium.examples.kmeans.sequential.staticData.SdSeqPmKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.cmeans.staticData.SDSMFCMeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.cmeans.staticData.SDSeqcmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.kmedian.staticData.SDMMKmedian;
+import cl.niclabs.skandium.examples.kmeans.skandium.kmedian.staticData.SDSMKmedian;
 import cl.niclabs.skandium.examples.kmeans.skandium.kmedian.staticData.SDSeqKmedian;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.hybridpartition.SDHPKmeans;
 import cl.niclabs.skandium.examples.kmeans.skandium.staticData.mapmaximization.SDMMKmeans;
@@ -74,6 +75,9 @@ public class Kmeans {
                 break;
             case "kmd-sd-mm":
                 result = new SDMMKmedian(config);
+                break;
+            case "kmd-sd-sm":
+                result = new SDSMKmedian(config);
                 break;
             case "fcm-sd-seq":
                 result = new SDSeqcmeans(config);

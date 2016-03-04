@@ -8,7 +8,8 @@ public class KMeansRunConfiguration {
     public String outputDB = "output.db";
 
     @Parameter(names = "-in")
-    public String inputFile = "/tmp/randomPoints-d3-n10000000.csv";
+    //public String inputFile = "/tmp/randomPoints-d3-n1000000.csv";
+    public String inputFile = "/home/maximilian/Dropbox/HU/Master/evaluation/datasets/birch1.txt";
 
     @Parameter(names = "-live")
     public boolean writeOutput;
@@ -20,7 +21,7 @@ public class KMeansRunConfiguration {
     public int numberOfClusterCenters = 10;
 
     @Parameter(names = "-d")
-    public int dimension = 3;
+    public int dimension = 2;
 
     @Parameter(names = "-i")
     public int numberOfIterations = 10;
