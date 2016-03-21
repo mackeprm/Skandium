@@ -1,5 +1,6 @@
 package cl.niclabs.skandium.examples.kmeans.configuration;
 
+import cl.niclabs.skandium.examples.kmeans.KMeansRunConfiguration;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import org.junit.Ignore;

@@ -1,6 +1,6 @@
 package cl.niclabs.skandium.examples.kmeans.model;
 
-import cl.niclabs.skandium.examples.kmeans.configuration.KMeansRunConfiguration;
+import cl.niclabs.skandium.examples.kmeans.KMeansRunConfiguration;
 import cl.niclabs.skandium.examples.kmeans.util.io.FileDataReader;
 import com.beust.jcommander.JCommander;
 import de.huberlin.mackeprm.skandium.statistics.Run;

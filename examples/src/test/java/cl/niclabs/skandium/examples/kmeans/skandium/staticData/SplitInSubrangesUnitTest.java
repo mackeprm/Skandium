@@ -1,5 +1,7 @@
 package cl.niclabs.skandium.examples.kmeans.skandium.staticData;
 
+import cl.niclabs.skandium.examples.kmeans.lloyd.Range;
+import cl.niclabs.skandium.examples.kmeans.lloyd.SplitInSubranges;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
