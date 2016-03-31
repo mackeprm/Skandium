@@ -25,6 +25,7 @@ import java.net.UnknownHostException;
 public class Kmeans {
 
     public static void main(String[] args) throws Exception {
+
         try {
             KMeansRunConfiguration config = new KMeansRunConfiguration();
             new JCommander(config, args);

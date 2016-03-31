@@ -7,6 +7,8 @@ import de.huberlin.mackeprm.skandium.statistics.Run;
 import de.huberlin.mackeprm.skandium.statistics.SqliteRunRepository;
 
 import java.io.IOException;
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -63,8 +65,30 @@ public abstract class AbstractKmeans {
 
     public void storeMeasure(long measure, long totalTime) throws Exception {
         if (writeOutput) {
+
+            long totalGarbageCollections = 0;
+            long garbageCollectionTime = 0;
+
+            for (GarbageCollectorMXBean gc :
+                    ManagementFactory.getGarbageCollectorMXBeans()) {
+
+                long count = gc.getCollectionCount();
+
+                if (count >= 0) {
+                    totalGarbageCollections += count;
+                }
+
+                long time = gc.getCollectionTime();
+
+                if (time >= 0) {
+                    garbageCollectionTime += time;
+                }
+            }
+
             Run currentRun = new Run(measure,
                     totalTime,
+                    totalGarbageCollections,
+                    garbageCollectionTime,
                     this.numberOfValues,
                     this.numberOfClusterCenters,
                     this.dimension,

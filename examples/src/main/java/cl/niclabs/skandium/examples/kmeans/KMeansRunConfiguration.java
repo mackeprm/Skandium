@@ -9,19 +9,19 @@ public class KMeansRunConfiguration {
 
     @Parameter(names = "-in")
     //public String inputFile = "/tmp/randomPoints-d3-n1000000.csv";
-    public String inputFile = "/home/maximilian/Dropbox/HU/Master/evaluation/datasets/birch1.txt";
+    public String inputFile = "/tmp/randomPoints-d8-n800000.csv";
 
     @Parameter(names = "-live")
     public boolean writeOutput;
 
     @Parameter(names = "-n")
-    public int numberOfValues = 600;
+    public int numberOfValues = 10_000;
 
     @Parameter(names = "-k")
-    public int numberOfClusterCenters = 10;
+    public int numberOfClusterCenters = 8;
 
     @Parameter(names = "-d")
-    public int dimension = 2;
+    public int dimension = 8;
 
     @Parameter(names = "-i")
     public int numberOfIterations = 10;
@@ -37,5 +37,4 @@ public class KMeansRunConfiguration {
 
     @Parameter(names = "-s")
     public long seed = 4711l;
-
 }

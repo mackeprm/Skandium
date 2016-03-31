@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 import java.sql.*;
 
 public class SqliteRunRepository implements AutoCloseable {
-    private static final String OUTPUT_DB = "sequential.db";
+    private static final String OUTPUT_DB = "output.db";
 
     private Connection dbConnection;
 
@@ -39,7 +39,7 @@ public class SqliteRunRepository implements AutoCloseable {
 
     public void initializeDatabase() throws SQLException {
         Statement createTable = dbConnection.createStatement();
-        String sql = ("CREATE TABLE runs (measure, totalTime, n, k, d, i, partitions, cpus, flavour, system, taskset, timestamp);");
+        String sql = ("CREATE TABLE runs (measure, totalTime, gcCount, gcTime, n, k, d, i, partitions, cpus, flavour, system, taskset, timestamp);");
         createTable.executeUpdate(sql);
         createTable.close();
     }
@@ -47,20 +47,22 @@ public class SqliteRunRepository implements AutoCloseable {
     //Copy paste from http://javabeginners.de/Datenbanken/SQLite-Datenbank.php
     public synchronized void dump(Run run) throws SQLException {
         PreparedStatement insertRun = dbConnection
-                .prepareStatement("INSERT INTO runs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                .prepareStatement("INSERT INTO runs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
         insertRun.setLong(1, run.getMeasure());
         insertRun.setLong(2, run.getTotalTime());
-        insertRun.setInt(3, run.getN());
-        insertRun.setInt(4, run.getK());
-        insertRun.setInt(5, run.getD());
-        insertRun.setInt(6, run.getI());
-        insertRun.setInt(7, run.getPartitions());
-        insertRun.setInt(8, run.getCpus());
-        insertRun.setString(9, run.getFlavour());
-        insertRun.setString(10, run.getSystem());
-        insertRun.setString(11, run.getTaskSet());
-        insertRun.setLong(12, run.getTimestamp());
+        insertRun.setLong(3, run.getGcCount());
+        insertRun.setLong(4, run.getGcTime());
+        insertRun.setInt(5, run.getN());
+        insertRun.setInt(6, run.getK());
+        insertRun.setInt(7, run.getD());
+        insertRun.setInt(8, run.getI());
+        insertRun.setInt(9, run.getPartitions());
+        insertRun.setInt(10, run.getCpus());
+        insertRun.setString(11, run.getFlavour());
+        insertRun.setString(12, run.getSystem());
+        insertRun.setString(13, run.getTaskSet());
+        insertRun.setLong(14, run.getTimestamp());
         insertRun.addBatch();
         dbConnection.setAutoCommit(false);
         insertRun.executeBatch();
