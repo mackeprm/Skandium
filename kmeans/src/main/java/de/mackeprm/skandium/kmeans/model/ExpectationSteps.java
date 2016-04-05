@@ -15,4 +15,16 @@ public class ExpectationSteps {
         return nearestClusterCenterIndex;
     }
 
+    public static int nearestClusterManhattan(double[] point, double[][] centroids) {
+        double distance = Double.MAX_VALUE;
+        int nearestClusterCenterIndex = Integer.MAX_VALUE;
+        for (int i = 0; i < centroids.length; i++) {
+            double currentDistance = DistanceMeasures.manhattanDistance(point, centroids[i]);
+            if (currentDistance < distance) {
+                distance = currentDistance;
+                nearestClusterCenterIndex = i;
+            }
+        }
+        return nearestClusterCenterIndex;
+    }
 }

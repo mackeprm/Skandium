@@ -2,6 +2,9 @@ package de.mackeprm.skandium.kmeans;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+import de.mackeprm.skandium.kmeans.implementations.kmedian.SDMMKmedian;
+import de.mackeprm.skandium.kmeans.implementations.kmedian.SDSMKmedian;
+import de.mackeprm.skandium.kmeans.implementations.kmedian.SDSeqKmedian;
 import de.mackeprm.skandium.kmeans.implementations.lloyd.hybridpartition.HpKmeans;
 import de.mackeprm.skandium.kmeans.implementations.lloyd.mapmaximization.MmKmeans;
 import de.mackeprm.skandium.kmeans.implementations.lloyd.partialmerge.PmKmeans;
@@ -58,7 +61,7 @@ public class Kmeans {
             case "pm":
                 result = new PmKmeans(config);
                 break;
-            /*case "kmd-seq":
+            case "kmd-seq":
                 result = new SDSeqKmedian(config);
                 break;
             case "kmd-mm":
@@ -67,7 +70,7 @@ public class Kmeans {
             case "kmd-sm":
                 result = new SDSMKmedian(config);
                 break;
-            case "fcm-seq":
+            /*case "fcm-seq":
                 result = new SDSeqcmeans(config);
                 break;
             case "fcm-sm":
