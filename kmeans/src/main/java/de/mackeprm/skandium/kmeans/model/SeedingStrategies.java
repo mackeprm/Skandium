@@ -1,9 +1,9 @@
-package cl.niclabs.skandium.examples.kmeans.lloyd.optimizedversions.util;
+package de.mackeprm.skandium.kmeans.model;
 
 import java.util.Arrays;
 import java.util.Random;
 
-public class Initialize {
+public class SeedingStrategies {
 
     public static double[][] randomFrom(double[][] data, long seed, int numberOfClusterCenters, int dimension) {
         final Random random = new Random(seed);

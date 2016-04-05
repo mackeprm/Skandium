@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans.lloyd.optimizedversions.sequential;
+package de.mackeprm.skandium.kmeans.model.modelutils;
 
 import java.util.Arrays;
 
@@ -11,6 +11,10 @@ public class Partial {
         sum = new double[dimension];
         Arrays.fill(sum, 0d);
         count = 0;
+    }
+
+    public void add(Partial partial) {
+        add(partial.sum, partial.count);
     }
 
     public void add(double[] point) {
@@ -31,4 +35,6 @@ public class Partial {
                 ", count=" + count +
                 '}';
     }
+
+
 }

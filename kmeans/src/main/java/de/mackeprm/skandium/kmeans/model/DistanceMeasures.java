@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.examples.kmeans.lloyd.optimizedversions.util;
+package de.mackeprm.skandium.kmeans.model;
 
 public class DistanceMeasures {
 

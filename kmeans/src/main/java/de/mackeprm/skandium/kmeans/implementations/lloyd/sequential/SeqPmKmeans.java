@@ -1,29 +1,30 @@
-package cl.niclabs.skandium.examples.kmeans.lloyd.optimizedversions.sequential;
+package de.mackeprm.skandium.kmeans.implementations.lloyd.sequential;
 
-import cl.niclabs.skandium.examples.kmeans.KMeansRunConfiguration;
-import cl.niclabs.skandium.examples.kmeans.lloyd.optimizedversions.util.DataSourceReader;
-import cl.niclabs.skandium.examples.kmeans.lloyd.optimizedversions.util.ExpectationSteps;
-import cl.niclabs.skandium.examples.kmeans.lloyd.optimizedversions.util.Initialize;
-import cl.niclabs.skandium.examples.kmeans.model.AbstractKmeans;
+import de.mackeprm.skandium.kmeans.model.ExpectationSteps;
+import de.mackeprm.skandium.kmeans.model.SeedingStrategies;
+import de.mackeprm.skandium.kmeans.model.modelutils.Partial;
+import de.mackeprm.skandium.kmeans.util.DefaultArgs;
+import de.mackeprm.skandium.kmeans.util.configuration.AbstractKmeans;
+import de.mackeprm.skandium.kmeans.util.configuration.KMeansRunConfiguration;
+import de.mackeprm.skandium.kmeans.util.io.DataSourceReader;
+import de.mackeprm.skandium.kmeans.util.io.Printer;
 
 import java.net.UnknownHostException;
 import java.util.Arrays;
 
-import static cl.niclabs.skandium.examples.kmeans.util.DefaultArgs.getOrDefault;
-
-public class SDOSeqKmeans extends AbstractKmeans {
+public class SeqPmKmeans extends AbstractKmeans {
 
 
-    public SDOSeqKmeans(String[] args) throws UnknownHostException {
+    public SeqPmKmeans(String[] args) throws UnknownHostException {
         super(args);
     }
 
-    public SDOSeqKmeans(KMeansRunConfiguration config) throws UnknownHostException {
+    public SeqPmKmeans(KMeansRunConfiguration config) throws UnknownHostException {
         super(config);
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractKmeans kmeans = new SDOSeqKmeans(getOrDefault(args, "sdo-seq"));
+        AbstractKmeans kmeans = new SeqPmKmeans(DefaultArgs.getOrDefault(args, "seq-pm"));
         System.out.println(kmeans.toString());
         kmeans.run();
     }
@@ -33,7 +34,7 @@ public class SDOSeqKmeans extends AbstractKmeans {
     public void run() throws Exception {
         long totalInit = System.currentTimeMillis();
         final double[][] data = DataSourceReader.initializeFromFileSource(inputFile, numberOfValues, dimension);
-        double[][] centroids = Initialize.randomFrom(data, seed, numberOfClusterCenters, dimension);
+        double[][] centroids = SeedingStrategies.randomFrom(data, seed, numberOfClusterCenters, dimension);
         Partial[] partials;
 
         long init = System.currentTimeMillis();
@@ -63,16 +64,9 @@ public class SDOSeqKmeans extends AbstractKmeans {
             }
         }
 
-
         long measure = System.currentTimeMillis() - init;
         System.out.println("time:" + measure + "[ms]");
-        for (int i = 0; i < numberOfClusterCenters; i++) {
-            System.out.print(i + " : ");
-            for (int j = 0; j < dimension; j++) {
-                System.out.print(centroids[i][j] + ", ");
-            }
-            System.out.print("\n");
-        }
+        Printer.printClusterCenters(centroids, dimension);
         storeMeasure(measure, System.currentTimeMillis() - totalInit);
     }
 
