@@ -27,7 +27,7 @@ public abstract class AbstractKmeans {
     public int dimension;
     public int numberOfValues;
     public long seed;
-    private String inputFile;
+    protected String inputFile;
 
 
     public AbstractKmeans(String[] args) throws UnknownHostException {

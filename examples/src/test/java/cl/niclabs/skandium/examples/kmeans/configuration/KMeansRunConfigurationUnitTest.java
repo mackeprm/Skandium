@@ -48,6 +48,7 @@ public class KMeansRunConfigurationUnitTest {
     }
 
     @Test
+    @Ignore
     public void testDefaultValues() {
         String[] args = {"-f", "foo"};
         KMeansRunConfiguration config = new KMeansRunConfiguration();
